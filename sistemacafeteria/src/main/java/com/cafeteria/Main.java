@@ -23,6 +23,13 @@ public class Main {
         s.close();
     }
 
+    public static void mostraTodosIngredientes(){
+        List<Ingrediente> i = IngredienteDAO.selectAll();
+        for(Ingrediente ing : i){
+            System.out.println(ing);
+        }
+    }
+
     public static void EscolhaIngrediente(Scanner s){
         System.out.println("1. Adicionar ingrediente");
         System.out.println("2. Remover ingrediente");
@@ -58,10 +65,7 @@ public class Main {
                 IngredienteDAO.deletaIngredientePorID(id);
                 return;
             case 3:
-                List<Ingrediente> i = IngredienteDAO.selectAll();
-                for(Ingrediente ing : i){
-                    System.out.println(ing);
-                }
+                mostraTodosIngredientes();
                 return;
             case 4:
                 System.out.println("Digite o id do ingrediente a ser mostrado:");
@@ -101,7 +105,14 @@ public class Main {
                 String categoria = s.nextLine();
                 novoProd.setCategoria(categoria);
 
-                ProdutoDAO.insereProduto(novoProd);
+                if(ProdutoDAO.insereProduto(novoProd)){
+                    System.out.println("Deseja adicionar os ingredientes do produto? (1: Sim, 2: Não)");
+                    int escolhaIngrediente = s.nextInt();
+                    while(escolhaIngrediente == 1){
+                        System.out.println("Escolha um ingrediente para adicionar à receita: ");
+
+                    }
+                }
                 return;
             case 2:
                 System.out.println("Digite o id do produto a ser removido:");

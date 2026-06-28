@@ -1,17 +1,16 @@
 package com.cafeteria.dados;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class Funcionario {
     private int id;
     private String nome;
     private float salario;
-    private Date data_contratacao;
+    private LocalDate data_contratacao;
     private String cargo;
 
     /* Construtor */
-    public Funcionario(int id, String nome, float salario, Date data_contratacao, String cargo){
+    public Funcionario(int id, String nome, float salario, LocalDate data_contratacao, String cargo){
         this.id = id;
         this.nome = nome;
         this.salario = salario;
@@ -41,10 +40,10 @@ public class Funcionario {
         this.salario = salario;
     }
 
-    public Date getData_contratacao() {
+    public LocalDate getData_contratacao() {
         return data_contratacao;
     }
-    public void setData_contratacao(Date data_contratacao) {
+    public void setData_contratacao(LocalDate data_contratacao) {
         this.data_contratacao = data_contratacao;
     }
 
