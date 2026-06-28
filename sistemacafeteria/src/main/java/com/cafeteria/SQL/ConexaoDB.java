@@ -14,8 +14,8 @@ public class ConexaoDB {
         try {
             if (conexao == null || conexao.isClosed()) {
                 conexao = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5433/cafeteria",
-                    "postgres", "1234"
+                    "jdbc:postgresql://localhost:5432/cafeteria",
+                    "luiza", "1234"
                 );
             }
         } catch(SQLException e){

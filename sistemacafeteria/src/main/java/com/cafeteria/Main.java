@@ -8,6 +8,7 @@ import com.cafeteria.SQL.ProdutoDAO;
 import com.cafeteria.dados.Ingrediente;
 import com.cafeteria.dados.Produto;
 
+
 public class Main {
     public static void main(String args[]){
         Scanner s = new Scanner(System.in);
@@ -20,13 +21,6 @@ public class Main {
         }
 
         s.close();
-        // Ingrediente i = IngredienteDAO.procuraIngredientePorNome("Café");
-
-        // if(i == null){
-        //     System.err.println("Ingrediente não encontrado");
-        // }else{
-        //     System.err.println(i.getNome());
-        // }
     }
 
     public static void EscolhaIngrediente(Scanner s){
@@ -82,7 +76,7 @@ public class Main {
                 System.out.println("Entrada inválida!");
                 return;
 
-           }
+        }
     }
 
     public static void EscolhaProdutos(Scanner s){
@@ -116,7 +110,62 @@ public class Main {
                 ProdutoDAO.deletaProdutoPorID(id);
                 return;
             case 3:
+                List<Produto> p = ProdutoDAO.selectAll();
+                for(Produto prod : p){
+                    System.out.println(prod);
+                }
+                return;
+            case 4:
+                System.out.println("Digite o id do produto a ser mostrado:");
+                int idd = Integer.parseInt(s.nextLine());
+                Produto prod = ProdutoDAO.procuraProdutoPorID(idd);
 
+                System.out.println(prod);
+                return;
+            case 5:
+                return;
+            default:
+                System.out.println("Entrada inválida!");
+                return;
+
+        }
+    }
+
+    public static void EscolhaFuncionario(Scanner s){
+        System.out.println("1. Adicionar funcionário");
+        System.out.println("2. Remover funcionário");
+        System.out.println("3. Mostrar todos os funcionários");
+        System.out.println("4. Mostrar um funcionário");
+        System.out.println("5. Voltar");
+           
+        int escolha = Integer.parseInt(s.nextLine());
+
+        switch (escolha) {
+            case 1:
+                Produto novoProd = new Produto();
+                System.out.println("Digite o nome do produto:");
+                String nome = s.nextLine();
+                novoProd.setNome(nome);
+                System.out.println("Digite o preço do produto:");
+                float preco = Float.parseFloat(s.nextLine());
+                novoProd.setPreco(preco);
+                System.out.println("Digite a categoria do produto:");
+                String categoria = s.nextLine();
+                novoProd.setCategoria(categoria);
+
+                ProdutoDAO.insereProduto(novoProd);
+                return;
+            case 2:
+                System.out.println("Digite o id do produto a ser removido:");
+                int id = Integer.parseInt(s.nextLine());
+
+                ProdutoDAO.deletaProdutoPorID(id);
+                return;
+            case 3:
+                List<Produto> p = ProdutoDAO.selectAll();
+                for(Produto prod : p){
+                    System.out.println(prod);
+                }
                 return;
             case 4:
                 System.out.println("Digite o id do produto a ser mostrado:");
@@ -155,6 +204,7 @@ public class Main {
                 return 0;
             case 3:
                 System.out.println("Escolhas Funcionários");
+                EscolhaFuncionario(s);
                 return 0;
             case 4:
                 System.out.println("Escolhas com Comanda/pedidos");
