@@ -23,7 +23,7 @@ public class IngredienteDAO {
             System.out.println("Ingrediente criado com sucesso!");
             return true;
         }catch(SQLException e){
-            System.out.println("Erro ao criar post: " + e.getMessage());
+            System.out.println("Erro ao criar ingrediente: " + e.getMessage());
             return false;
         }
     }
@@ -90,6 +90,39 @@ public class IngredienteDAO {
             return true;
         }catch(SQLException e){
             System.out.println("Erro ao deletar ingrediente: " + e.getMessage());
+            
+            return false;
+        }
+    }
+
+    public static Boolean alteraIngrediente(String campoAlterado, int ingredienteID, String novoAtributo){
+        String sql = "UPDATE Ingrediente SET " + campoAlterado + " = ? WHERE ID_ingrediente = ?";
+        try{
+            Connection con = ConexaoDB.getInstancia();
+            PreparedStatement st = con.prepareStatement(sql);
+            switch (campoAlterado) {
+                case "nome":
+                case "descricao":
+                case "unidade_medida":
+                    st.setString(1, novoAtributo);
+                    break;
+            
+                case "quantidade":
+                    st.setFloat(1, Float.parseFloat(novoAtributo));
+                    break;
+                    
+                default:
+                    System.out.println("Escolha de campo inválida");
+                    return false;
+            }
+            st.setInt(2, ingredienteID);
+            st.executeUpdate();
+            st.close();
+            System.out.println("Ingrediente alterado com sucesso!");
+
+            return true;
+        }catch(SQLException e){
+            System.out.println("Erro ao alterar ingrediente: " + e.getMessage());
             
             return false;
         }
