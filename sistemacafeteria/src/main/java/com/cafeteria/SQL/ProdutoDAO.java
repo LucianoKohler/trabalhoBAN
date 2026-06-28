@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cafeteria.dados.Produto;
 
@@ -68,6 +70,29 @@ public class ProdutoDAO {
             }else{
                 return null;
             }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static List<Produto> selectAll(){
+        List<Produto> produtos = new ArrayList<>();
+        String sql = "SELECT * FROM Produto";
+
+        try{
+            Connection con = ConexaoDB.getInstancia();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet res = st.executeQuery();
+            while(res.next()){
+                Produto p = new Produto(
+                    res.getInt("ID_produto"),
+                    res.getString("nome"), 
+                    res.getFloat("preco"), 
+                    res.getString("categoria"));
+                produtos.add(p);
+            }
+            return produtos;
         }catch(SQLException e){
             System.out.println(e.getMessage());
             return null;

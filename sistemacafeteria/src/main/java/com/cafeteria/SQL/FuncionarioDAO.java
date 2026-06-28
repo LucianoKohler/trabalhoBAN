@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cafeteria.dados.Funcionario;
 
@@ -77,6 +79,30 @@ public class FuncionarioDAO {
             return null;
         }
     }
+
+        public static List<Funcionario> selectAll(){
+            List<Funcionario> funcionarios = new ArrayList<>();
+            String sql = "SELECT * FROM Funcionario";
+
+            try{
+                Connection con = ConexaoDB.getInstancia();
+                PreparedStatement st = con.prepareStatement(sql);
+                ResultSet rs = st.executeQuery();
+                while(rs.next()){
+                    Funcionario i = new Funcionario(
+                        rs.getInt("ID_funcionario"),
+                        rs.getString("nome"), 
+                        rs.getFloat("salario"), 
+                        rs.getDate("data_contratacao"),
+                        rs.getString("cargo"));
+                    funcionarios.add(i);
+                }
+                return funcionarios;
+            }catch(SQLException e){
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
 
     public static Boolean deletaFuncionarioPorID(int fID){
         String sql = "DELETE FROM Funcionarios WHERE ID_funcionario = ?";

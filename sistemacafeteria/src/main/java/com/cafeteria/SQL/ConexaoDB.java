@@ -11,25 +11,16 @@ public class ConexaoDB {
     private ConexaoDB() {}
 
     public static Connection getInstancia() {
-        if (conexao == null) {
-            /* 
-            try {
+        try {
+            if (conexao == null || conexao.isClosed()) {
                 conexao = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5433/cafeteria",
                     "postgres", "1234"
                 );
-            } catch (SQLException e) {
-                System.out.println("Erro ao conectar: " + e.getMessage());
-            }*/
-            try {
-                conexao = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/cafeteria",
-                    "luiza", "1234"
-                );
-            } catch (SQLException e) {
-                System.out.println("Erro ao conectar: " + e.getMessage());
             }
-        } 
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
         return conexao;
     }
 }
