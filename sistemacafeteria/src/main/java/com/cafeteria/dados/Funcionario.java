@@ -18,6 +18,10 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
+    public Funcionario(){
+
+    }
+    
     /* Gets e Sets */
     public int getId() {
         return id;
