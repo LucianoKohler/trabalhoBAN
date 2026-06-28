@@ -1,11 +1,10 @@
-package com.cafeteria.DAO;
+package com.cafeteria.SQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.cafeteria.banco.ConexaoDB;
 import com.cafeteria.dados.Ingrediente;
 
 public class IngredienteDAO {

@@ -1,4 +1,4 @@
-package com.cafeteria.banco;
+package com.cafeteria.SQL;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
