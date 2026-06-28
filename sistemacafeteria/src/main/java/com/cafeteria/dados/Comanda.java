@@ -1,4 +1,4 @@
-package com.cafeteria.model;
+package com.cafeteria.dados;
 
 import java.time.LocalDateTime;
 

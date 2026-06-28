@@ -26,6 +26,8 @@ CREATE TABLE Funcionario(
 	data_contratacao date,
 	cargo varchar(20)
 );
+ALTER TABLE Funcionario ADD CONSTRAINT check_cargo
+CHECK (cargo IN ('BARISTA', 'GERENTE', 'FAXINEIRO'))
 
 CREATE TABLE Ingrediente(
 	ID_ingrediente SERIAL PRIMARY KEY,
@@ -41,6 +43,8 @@ CREATE TABLE Produto(
 	preco float,
 	categoria varchar(20)
 );
+ALTER TABLE Produto ADD CONSTRAINT check_categoria
+CHECK (categoria IN ('BEBIDA_QUENTE', 'BEBIDA_FRIA', 'SALGADO', 'DOCE', 'BOLO', 'OUTROS'))
 
 CREATE TABLE Comanda(
 	ID_comanda SERIAL PRIMARY KEY,
@@ -52,12 +56,15 @@ CREATE TABLE Comanda(
 CREATE TABLE Pedido(
 	ID_pedido SERIAL PRIMARY KEY,
 	data_hora_pedido timestamp,
+    status_pedido varchar(20) DEFAULT 'PENDENTE',
 	FK_comanda int,
 	FK_funcionario int,
 
 	FOREIGN KEY (FK_comanda) REFERENCES Comanda(ID_comanda),
 	FOREIGN KEY (FK_funcionario) REFERENCES Funcionario(ID_funcionario)
 );
+ALTER TABLE Pedido ADD CONSTRAINT check_status 
+CHECK (status_pedido IN ('PENDENTE', 'EM_PREPARO', 'ATENDIDO', 'CANCELADO'));
 
 CREATE TABLE Info_produto(
 	ID_info_produto SERIAL PRIMARY KEY,

@@ -1,4 +1,4 @@
-package com.cafeteria.model;
+package com.cafeteria.dados;
 
 public class Ingrediente {
     private int id;

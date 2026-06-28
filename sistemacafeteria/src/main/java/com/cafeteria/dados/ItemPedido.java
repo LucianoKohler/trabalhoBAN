@@ -1,7 +1,4 @@
-package com.cafeteria.model;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+package com.cafeteria.dados;
 
 public class ItemPedido {
     private int id;
