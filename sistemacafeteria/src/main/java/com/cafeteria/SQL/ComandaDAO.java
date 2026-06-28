@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cafeteria.dados.Comanda;
+import com.cafeteria.dados.Funcionario;
 
 public class ComandaDAO {
 
@@ -45,6 +47,29 @@ public class ComandaDAO {
             }else{
                 return null;
             }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static List<Comanda> selectAll(){
+        List<Comanda> comandas = new ArrayList<>();
+        String sql = "SELECT * FROM Comandas";
+
+        try{
+            Connection con = ConexaoDB.getInstancia();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet res = st.executeQuery();
+            while(res.next()){
+                Comanda c = new Comanda(
+                    res.getInt("ID_comanda"),
+                    res.getInt("numero_mesa"), 
+                    res.getTimestamp("data_hora_abertura").toLocalDateTime(),
+                    res.getString("status_pgto"));
+                comandas.add(c);
+            }
+            return comandas;
         }catch(SQLException e){
             System.out.println(e.getMessage());
             return null;

@@ -3,7 +3,7 @@ package com.cafeteria;
 import java.util.List;
 import java.util.Scanner;
 
-import com.cafeteria.DAO.IngredienteDAO;
+import com.cafeteria.SQL.IngredienteDAO;
 import com.cafeteria.dados.Ingrediente;
 
 public class Main {
