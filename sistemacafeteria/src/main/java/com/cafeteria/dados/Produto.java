@@ -14,6 +14,10 @@ public class Produto {
         this.categoria = categoria;
     }
 
+    public Produto(){
+
+    }
+
     /* Gets e Sets */
     public int getId() {
         return id;
@@ -45,7 +49,7 @@ public class Produto {
 
     public String toString(){
         StringBuffer s = new StringBuffer();
-        s.append("ID: " + id + "\nNome: " + nome + "\nPreço: R$" + preco + "\nCategoria " + categoria);
+        s.append("ID: " + id + " Nome: " + nome + " Preço: R$" + preco + " Categoria " + categoria);
         
         return s.toString();
     }

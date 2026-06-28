@@ -18,8 +18,8 @@ public class ConexaoDB {
                     "postgres", "1234"
                 );
             }
-        } catch (SQLException e) {
-            System.out.println("Erro ao conectar ou restabelecer conexão: " + e.getMessage());
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
         }
         return conexao;
     }

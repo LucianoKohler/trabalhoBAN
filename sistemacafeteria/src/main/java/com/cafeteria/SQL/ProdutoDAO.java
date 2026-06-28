@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cafeteria.dados.Funcionario;
 import com.cafeteria.dados.Produto;
 
 public class ProdutoDAO {

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cafeteria.dados.Funcionario;
-import com.cafeteria.dados.Ingrediente;
 
 public class FuncionarioDAO {
 

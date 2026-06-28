@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.cafeteria.SQL.IngredienteDAO;
+import com.cafeteria.SQL.ProdutoDAO;
 import com.cafeteria.dados.Ingrediente;
+import com.cafeteria.dados.Produto;
 
 public class Main {
     public static void main(String args[]){
@@ -83,6 +85,55 @@ public class Main {
            }
     }
 
+    public static void EscolhaProdutos(Scanner s){
+        System.out.println("1. Adicionar produto");
+        System.out.println("2. Remover produto");
+        System.out.println("3. Mostrar todos os produtos");
+        System.out.println("4. Mostrar um produto");
+        System.out.println("5. Voltar");
+           
+        int escolha = Integer.parseInt(s.nextLine());
+
+        switch (escolha) {
+            case 1:
+                Produto novoProd = new Produto();
+                System.out.println("Digite o nome do produto:");
+                String nome = s.nextLine();
+                novoProd.setNome(nome);
+                System.out.println("Digite o preço do produto:");
+                float preco = Float.parseFloat(s.nextLine());
+                novoProd.setPreco(preco);
+                System.out.println("Digite a categoria do produto:");
+                String categoria = s.nextLine();
+                novoProd.setCategoria(categoria);
+
+                ProdutoDAO.insereProduto(novoProd);
+                return;
+            case 2:
+                System.out.println("Digite o id do produto a ser removido:");
+                int id = Integer.parseInt(s.nextLine());
+
+                ProdutoDAO.deletaProdutoPorID(id);
+                return;
+            case 3:
+
+                return;
+            case 4:
+                System.out.println("Digite o id do produto a ser mostrado:");
+                int idd = Integer.parseInt(s.nextLine());
+                Produto prod = ProdutoDAO.procuraProdutoPorID(idd);
+
+                System.out.println(prod);
+                return;
+            case 5:
+                return;
+            default:
+                System.out.println("Entrada inválida!");
+                return;
+
+           }
+    }
+
     public static int menu(Scanner s){
         System.out.println(".o°o.o°o.o° CAFETERIA °o.o°o.o°o.");
         System.out.println("1. Opções com Ingredientes");
@@ -100,6 +151,7 @@ public class Main {
                 return 0;
             case 2:
                 System.out.println("Escolhas com Produtos");
+                EscolhaProdutos(s);
                 return 0;
             case 3:
                 System.out.println("Escolhas Funcionários");

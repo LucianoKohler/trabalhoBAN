@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cafeteria.dados.Comanda;
-import com.cafeteria.dados.Funcionario;
 
 public class ComandaDAO {
 
