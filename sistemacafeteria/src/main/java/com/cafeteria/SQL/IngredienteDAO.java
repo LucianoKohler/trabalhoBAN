@@ -109,11 +109,16 @@ public class IngredienteDAO {
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, ingId);
-            st.executeUpdate();
+            int linhasAfetadas = st.executeUpdate();            
             st.close();
-            System.out.println("Ingrediente deletado com sucesso!");
+            if(linhasAfetadas > 0){
+                System.out.println("Ingrediente deletado com sucesso!");
+                return true;
+            }else{
+                System.out.println("Ingrediente não encontrado! Nenhum ingrediente deletado");
+                return false;
+            }
 
-            return true;
         }catch(SQLException e){
             System.out.println("Erro ao deletar ingrediente: " + e.getMessage());
             

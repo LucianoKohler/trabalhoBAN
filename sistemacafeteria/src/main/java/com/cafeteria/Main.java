@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 import com.cafeteria.SQL.InfoProdutoDAO;
 import com.cafeteria.SQL.IngredienteDAO;
+import com.cafeteria.SQL.PedidoDAO;
 import com.cafeteria.SQL.ProdutoDAO;
 import com.cafeteria.dados.Ingrediente;
+import com.cafeteria.dados.Pedido;
 import com.cafeteria.dados.Produto;
 
 public class Main {
@@ -21,21 +23,16 @@ public class Main {
         }
 
         s.close();
-        // Ingrediente i = IngredienteDAO.procuraIngredientePorNome("Café");
 
-        // if(i == null){
-        //     System.err.println("Ingrediente não encontrado");
-        // }else{
-        //     System.err.println(i.getNome());
-        // }
     }
 
-
+    /* AUXILIARES + FUNÇÕES SOBRE INGREDIENTES */
     public static void mostraTodosIngredientes(){
         List<Ingrediente> i = IngredienteDAO.selectAll();
         for(Ingrediente ing : i){
             System.out.println(ing);
         }
+        System.out.println();
     }
     public static int escolheIngrediente(Scanner s){
         System.out.println("Escolha um ingrediente: ");
@@ -43,8 +40,7 @@ public class Main {
         System.out.print("Sua escolha: ");
         return s.nextInt();
     }
-
-    public static void EscolhaIngrediente(Scanner s){
+    public static void menuEscolhaIngrediente(Scanner s){
         System.out.println("1. Adicionar ingrediente");
         System.out.println("2. Remover ingrediente");
         System.out.println("3. Mostrar todos os ingredientes");
@@ -73,6 +69,7 @@ public class Main {
 
                 return;
             case 2:
+                mostraTodosIngredientes();
                 System.out.println("Digite o id do ingrediente a ser removido:");
                 int id = Integer.parseInt(s.nextLine());
 
@@ -97,7 +94,21 @@ public class Main {
            }
     }
 
-    public static void EscolhaProdutos(Scanner s){
+    /* AUXILIARES + FUNÇÕES SOBRE PRODUTOS */
+    public static void mostraTodosProdutos(){
+        List<Produto> list = ProdutoDAO.selectAll();
+        for(Produto p : list){
+            System.out.println(p);
+        }
+        System.out.println();
+    }
+    public static int escolheProduto(Scanner s){
+        System.out.println("Escolha um produto: ");
+        mostraTodosProdutos();
+        System.out.print("Sua escolha: ");
+        return s.nextInt();
+    }
+    public static void menuEscolhaProduto(Scanner s){
         System.out.println("1. Adicionar produto");
         System.out.println("2. Remover produto");
         System.out.println("3. Mostrar todos os produtos");
@@ -139,19 +150,16 @@ public class Main {
                 }
                 return;
             case 2:
-                System.out.println("Digite o id do produto a ser removido:");
-                int id = Integer.parseInt(s.nextLine());
-
+                int id = escolheProduto(s);
                 ProdutoDAO.deletaProdutoPorID(id);
                 return;
             case 3:
-
+                mostraTodosProdutos();
                 return;
             case 4:
                 System.out.println("Digite o id do produto a ser mostrado:");
-                int idd = Integer.parseInt(s.nextLine());
+                int idd = s.nextInt();
                 Produto prod = ProdutoDAO.procuraProdutoPorID(idd);
-
                 System.out.println(prod);
                 return;
             case 5:
@@ -163,32 +171,49 @@ public class Main {
            }
     }
 
+    /* AUXILIARES + FUNÇÕES SOBRE FUNCIONÁRIOS */
+    /* AUXILIARES + FUNÇÕES SOBRE COMANDAS */
+    /* AUXILIARES + FUNÇÕES SOBRE PEDIDOS */
+    public static void mostraTodosPedidosPendentes(){
+        List<Pedido> list = PedidoDAO.selectAll("PENDENTE");
+        for(Pedido p : list){
+            System.out.println(p);
+        }
+        System.out.println();
+    }
+    public static void mostraTodosPedidosConcluidos(){}
+
+
     public static int menu(Scanner s){
         System.out.println(".o°o.o°o.o° CAFETERIA °o.o°o.o°o.");
         System.out.println("1. Opções com Ingredientes");
         System.out.println("2. Opções com Produtos");
         System.out.println("3. Opções com Funcionários");
-        System.out.println("4. Opções com Comanda/Pedido");
-        System.out.println("5. Sair do Programa");
+        System.out.println("4. Opções com Comanda");
+        System.out.println("5. Opções com Pedido");
+        System.out.println("6. Sair do Programa");
         
         int escolha = Integer.parseInt(s.nextLine());
 
         switch (escolha) {
             case 1:
                 System.out.println("Escolhas com Ingredientes");
-                EscolhaIngrediente(s);
+                menuEscolhaIngrediente(s);
                 return 0;
             case 2:
                 System.out.println("Escolhas com Produtos");
-                EscolhaProdutos(s);
+                menuEscolhaProduto(s);
                 return 0;
             case 3:
                 System.out.println("Escolhas Funcionários");
                 return 0;
             case 4:
-                System.out.println("Escolhas com Comanda/pedidos");
+                System.out.println("Escolhas com Comanda");
                 return 0;
             case 5:
+                System.out.println("Escolhas com Pedidos!");
+                return -1;
+            case 6:
                 System.out.println("Até mais!");
                 return -1;
             default:

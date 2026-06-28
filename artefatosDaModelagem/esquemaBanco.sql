@@ -55,7 +55,7 @@ CREATE TABLE Comanda(
 
 CREATE TABLE Pedido(
 	ID_pedido SERIAL PRIMARY KEY,
-	data_hora_pedido timestamp,
+    data_hora_abertura timestamp DEFAULT CURRENT_TIMESTAMP,
     status_pedido varchar(20) DEFAULT 'PENDENTE',
 	FK_comanda int,
 	FK_funcionario int,

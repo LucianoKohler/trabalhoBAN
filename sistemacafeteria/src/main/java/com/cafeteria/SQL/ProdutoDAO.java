@@ -115,11 +115,15 @@ public class ProdutoDAO {
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, pID);
-            st.executeUpdate();
+            int linhasAfetadas = st.executeUpdate();
             st.close();
-            System.out.println("Produto deletado com sucesso!");
-
-            return true;
+            if(linhasAfetadas > 0){
+                System.out.println("Produto deletado com sucesso!");
+                return true;
+            }else{
+                System.out.println("Produto não encontrado! Nenhum produto deletado");
+                return false;
+            }
         }catch(SQLException e){
             System.out.println("Erro ao deletar Produto: " + e.getMessage());
             
