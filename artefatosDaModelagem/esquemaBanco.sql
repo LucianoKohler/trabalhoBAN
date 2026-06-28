@@ -27,7 +27,7 @@ CREATE TABLE Funcionario(
 	cargo varchar(20)
 );
 ALTER TABLE Funcionario ADD CONSTRAINT check_cargo
-CHECK (cargo IN ('BARISTA', 'GERENTE', 'FAXINEIRO'))
+CHECK (cargo IN ('BARISTA', 'GERENTE', 'FAXINEIRO'));
 
 CREATE TABLE Ingrediente(
 	ID_ingrediente SERIAL PRIMARY KEY,
@@ -44,12 +44,12 @@ CREATE TABLE Produto(
 	categoria varchar(20)
 );
 ALTER TABLE Produto ADD CONSTRAINT check_categoria
-CHECK (categoria IN ('BEBIDA_QUENTE', 'BEBIDA_FRIA', 'SALGADO', 'DOCE', 'BOLO', 'OUTROS'))
+CHECK (categoria IN ('BEBIDA_QUENTE', 'BEBIDA_FRIA', 'SALGADO', 'DOCE', 'BOLO', 'OUTROS'));
 
 CREATE TABLE Comanda(
 	ID_comanda SERIAL PRIMARY KEY,
 	numero_mesa int,
-	data_hora_abertura timestamp,
+	data_hora_abertura timestamp default CURRENT_TIMESTAMP,
 	status_pgto varchar(20)
 );
 
