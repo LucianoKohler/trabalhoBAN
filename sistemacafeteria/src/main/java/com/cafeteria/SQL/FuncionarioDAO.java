@@ -19,7 +19,7 @@ public class FuncionarioDAO {
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, f.getNome());
             st.setFloat(2, f.getSalario());
-            st.setDate(3, f.getData_contratacao());
+            st.setDate(3, java.sql.Date.valueOf(f.getData_contratacao()));
             st.setString(4, f.getCargo());
             st.executeUpdate();
             st.close();
@@ -44,7 +44,7 @@ public class FuncionarioDAO {
                     res.getInt("ID_funcionario"),
                     res.getString("nome"), 
                     res.getFloat("salario"), 
-                    res.getDate("data_contratacao"),
+                    res.getDate("data_contratacao").toLocalDate(),
                     res.getString("cargo"));
             }else{
                 return null;
@@ -69,7 +69,7 @@ public class FuncionarioDAO {
                     res.getInt("ID_funcionario"),
                     res.getString("nome"), 
                     res.getFloat("salario"), 
-                    res.getDate("data_contratacao"),
+                    res.getDate("data_contratacao").toLocalDate(),
                     res.getString("cargo"));
             }else{
                 return null;
@@ -93,7 +93,7 @@ public class FuncionarioDAO {
                         rs.getInt("ID_funcionario"),
                         rs.getString("nome"), 
                         rs.getFloat("salario"), 
-                        rs.getDate("data_contratacao"),
+                        rs.getDate("data_contratacao").toLocalDate(),
                         rs.getString("cargo"));
                     funcionarios.add(i);
                 }
