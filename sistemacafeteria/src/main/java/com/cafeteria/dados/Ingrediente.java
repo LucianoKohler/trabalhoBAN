@@ -16,6 +16,10 @@ public class Ingrediente {
         this.unidade_medida = unidade_medida;
     }
 
+    public Ingrediente(){
+
+    }
+
     /* Gets e Sets */
     public int getId() {
         return id;
@@ -44,14 +48,18 @@ public class Ingrediente {
     public void setQuantidade(float quantidade) {
         this.quantidade = quantidade;
     }
-
+    public void setUnidade_medida(String unidade_medida) {
+        this.unidade_medida = unidade_medida;
+    }    
     public String getUnidade_medida() {
         return unidade_medida;
     }
 
     public String toString(){
         StringBuffer s = new StringBuffer();
-        s.append("ID: " + id + "\nNome: " + nome + "\nDescricao: " + descricao + "\n Quantidade em estoque " + quantidade + " " + unidade_medida);
+        s.append("ID: " + id + " Nome: " + nome + " Descricao: " + descricao + " Quantidade em estoque " + quantidade + " " + unidade_medida);
         return s.toString();
     }
+
+
 }

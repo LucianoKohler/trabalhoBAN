@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.naming.spi.DirStateFactory.Result;
 
 import com.cafeteria.dados.Ingrediente;
 
 public class IngredienteDAO {
-
     public static Boolean insereIngrediente(Ingrediente ing){
         String sql = "INSERT INTO Ingrediente (nome, descricao, quantidade, unidade_medida) VALUES (?, ?, ?, ?)";
         try{
@@ -29,7 +32,7 @@ public class IngredienteDAO {
     }
 
     public static Ingrediente procuraIngredientePorID(int ingID){
-        String sql = "SELECT * FROM Ingrediente WHERE ID_ingrediente = ?";
+        String sql = "SELECT * FROM ingrediente WHERE ID_ingrediente = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
@@ -77,8 +80,32 @@ public class IngredienteDAO {
         }
     }
 
+    public static List<Ingrediente> selectAll(){
+        List<Ingrediente> ingredientes = new ArrayList<>();
+        String sql = "SELECT * FROM Ingrediente";
+
+        try{
+            Connection con = ConexaoDB.getInstancia();
+            PreparedStatement st = con.prepareStatement(sql);
+            ResultSet rs = st.executeQuery();
+            while(rs.next()){
+                Ingrediente i = new Ingrediente(
+                    rs.getInt("id_ingrediente"),
+                    rs.getString("nome"),
+                    rs.getString("descricao"), 
+                    rs.getFloat("quantidade"),
+                    rs.getString("unidade_medida"));
+                ingredientes.add(i);
+            }
+            return ingredientes;
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
     public static Boolean deletaIngredientePorID(int ingId){
-        String sql = "DELETE FROM Ingredientes WHERE ID_ingrediente = ?";
+        String sql = "DELETE FROM Ingrediente WHERE ID_ingrediente = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
