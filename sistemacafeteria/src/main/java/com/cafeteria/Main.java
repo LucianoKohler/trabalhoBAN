@@ -3,6 +3,7 @@ package com.cafeteria;
 import java.util.List;
 import java.util.Scanner;
 
+import com.cafeteria.SQL.InfoProdutoDAO;
 import com.cafeteria.SQL.IngredienteDAO;
 import com.cafeteria.SQL.ProdutoDAO;
 import com.cafeteria.dados.Ingrediente;
@@ -29,11 +30,18 @@ public class Main {
         // }
     }
 
+
     public static void mostraTodosIngredientes(){
         List<Ingrediente> i = IngredienteDAO.selectAll();
         for(Ingrediente ing : i){
             System.out.println(ing);
         }
+    }
+    public static int escolheIngrediente(Scanner s){
+        System.out.println("Escolha um ingrediente: ");
+        mostraTodosIngredientes();
+        System.out.print("Sua escolha: ");
+        return s.nextInt();
     }
 
     public static void EscolhaIngrediente(Scanner s){
@@ -111,12 +119,22 @@ public class Main {
                 String categoria = s.nextLine();
                 novoProd.setCategoria(categoria);
 
-                if(ProdutoDAO.insereProduto(novoProd)){
+                int idNovoProduto = ProdutoDAO.insereProduto(novoProd);
+
+                if(idNovoProduto != -1){
                     System.out.println("Deseja adicionar os ingredientes do produto? (1: Sim, 2: Não)");
                     int escolhaIngrediente = s.nextInt();
                     while(escolhaIngrediente == 1){
-                        System.out.println("Escolha um ingrediente para adicionar à receita: ");
-
+                        int ingredienteID = escolheIngrediente(s);
+                        if(IngredienteDAO.procuraIngredientePorID(ingredienteID) != null) {
+                            System.out.println("Insira a quantidade de ingrediente necessário: ");
+                            float qtd = s.nextFloat();
+                            System.out.print("Insira observações sobre o uso do ingrediente (ou deixe vazio): ");
+                            String desc = s.nextLine();
+                            InfoProdutoDAO.criaInfoProduto(qtd, desc, ingredienteID, idNovoProduto);
+                            System.out.println("Adicionar outro ingrediente? (1: Sim, 2: Não)");
+                            escolhaIngrediente = s.nextInt();
+                        }
                     }
                 }
                 return;

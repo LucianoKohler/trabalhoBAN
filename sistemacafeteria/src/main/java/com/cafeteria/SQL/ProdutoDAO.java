@@ -5,27 +5,37 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.sql.Statement;
 import java.util.List;
 
 import com.cafeteria.dados.Produto;
 
 public class ProdutoDAO {
 
-    public static Boolean insereProduto(Produto p){
+    public static int insereProduto(Produto p){
         String sql = "INSERT INTO Produto (nome, preco, categoria) VALUES (?, ?, ?)";
         try{
             Connection con = ConexaoDB.getInstancia();
-            PreparedStatement st = con.prepareStatement(sql);
+            PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setString(1, p.getNome());
             st.setFloat(2, p.getPreco());
             st.setString(3, p.getCategoria());
             st.executeUpdate();
+
+            try (ResultSet rs = st.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int idGerado = rs.getInt(1); // O ID estará sempre na primeira coluna desse ResultSet
+                    System.out.println("Produto criado com sucesso! ID: " + idGerado);
+                    st.close();
+                    return idGerado;
+                }
+            }
+
             st.close();
-            System.out.println("Produto criado com sucesso!");
-            return true;
+            return -1;
         }catch(SQLException e){
             System.out.println("Erro ao criar produto: " + e.getMessage());
-            return false;
+            return -1;
         }
     }
 
