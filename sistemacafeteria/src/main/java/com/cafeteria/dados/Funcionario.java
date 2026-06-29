@@ -18,6 +18,10 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
+    public Funcionario(){
+
+    }
+    
     /* Gets e Sets */
     public int getId() {
         return id;
@@ -56,9 +60,9 @@ public class Funcionario {
 
     public String toString(){
         StringBuffer s = new StringBuffer();
-        s.append("ID: " + id + "\nNome: " + nome + 
-        "\nSalário: R$" + salario + "\nData de Contratação: " + data_contratacao.toString() +
-        "\n Cargo: " + cargo);
+        s.append("ID: " + id + " Nome: " + nome + 
+        " Salário: R$" + salario + " Data de Contratação: " + data_contratacao.toString() +
+        " Cargo: " + cargo);
         
         return s.toString();
     }

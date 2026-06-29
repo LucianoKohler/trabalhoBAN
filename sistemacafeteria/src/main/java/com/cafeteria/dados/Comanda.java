@@ -1,6 +1,7 @@
 package com.cafeteria.dados;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Comanda {
     private int id;
@@ -14,6 +15,10 @@ public class Comanda {
         this.numero_mesa = numero_mesa;
         this.data_abertura = data_abertura;
         this.status_pgto = status_pgto;
+    }
+
+    public Comanda(){
+
     }
 
     /* Gets e Sets */
@@ -48,8 +53,9 @@ public class Comanda {
 
     public String toString(){
         StringBuffer s = new StringBuffer();
-        s.append("ID: " + id + "\nN° mesa: " + numero_mesa +
-        "\nData de Abertura: " + data_abertura.toString() + "\nStatus: " + status_pgto);
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        s.append("ID: " + id + " N° mesa: " + numero_mesa +
+        " Data de Abertura: " + data_abertura.format(fmt) + " Status: " + status_pgto);
         
         return s.toString();
     }
