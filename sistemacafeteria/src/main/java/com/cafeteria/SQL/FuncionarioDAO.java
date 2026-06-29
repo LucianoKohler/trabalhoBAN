@@ -110,11 +110,16 @@ public class FuncionarioDAO {
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, fID);
-            st.executeUpdate();
+            int linhasAfetadas = st.executeUpdate();
             st.close();
-            System.out.println("Funcionário deletado com sucesso!");
 
-            return true;
+            if(linhasAfetadas > 0){
+                System.out.println("Funcionário deletado com sucesso!");
+                return true;
+            }else{
+                System.out.println("Funcionário não encontrado! Nenhum funcionário deletado");
+                return false;
+            }
         }catch(SQLException e){
             System.out.println("Erro ao deletar Funcionário: " + e.getMessage());
             

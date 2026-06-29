@@ -52,6 +52,8 @@ CREATE TABLE Comanda(
 	data_hora_abertura timestamp default CURRENT_TIMESTAMP,
 	status_pgto varchar(20)
 );
+ALTER TABLE Comanda ADD CONSTRAINT check_status_pgto
+CHECK (status_pgto IN ('ABERTA', 'PAGA'));
 
 CREATE TABLE Pedido(
 	ID_pedido SERIAL PRIMARY KEY,

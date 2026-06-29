@@ -52,13 +52,20 @@ public class ComandaDAO {
         }
     }
 
-    public static List<Comanda> selectAll(){
+    public static List<Comanda> selectAll(String tipo){
         List<Comanda> comandas = new ArrayList<>();
-        String sql = "SELECT * FROM Comanda";
-
+        
         try{
             Connection con = ConexaoDB.getInstancia();
+            String sql;
+            if(tipo.length() == 0){
+                sql = "SELECT * FROM Comanda";                
+            }else{
+                sql = "SELECT * FROM Comanda WHERE status_pgto = ?";
+            }
             PreparedStatement st = con.prepareStatement(sql);
+            if(tipo.length() > 0) st.setString(1, tipo);
+
             ResultSet res = st.executeQuery();
             while(res.next()){
                 Comanda c = new Comanda(
@@ -81,11 +88,16 @@ public class ComandaDAO {
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, cID);
-            st.executeUpdate();
+            int linhasAfetadas = st.executeUpdate();
             st.close();
-            System.out.println("Comanda deletada com sucesso!");
 
-            return true;
+            if(linhasAfetadas > 0){
+                System.out.println("Comanda deletada com sucesso!");
+                return true;
+            }else{
+                System.out.println("Comanda não encontrada! Nenhuma comanda deletada");
+                return false;
+            }
         }catch(SQLException e){
             System.out.println("Erro ao deletar Comanda: " + e.getMessage());
             
