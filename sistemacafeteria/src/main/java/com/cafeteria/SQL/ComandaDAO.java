@@ -134,4 +134,27 @@ public class ComandaDAO {
             return false;
         }
     }
+
+    public static double calcularTotal(int comandaID){
+        String sql = "SELECT COALESCE(SUM(ip.quantidade * ip.preco_unitario), 0) AS total FROM Item_pedido ip JOIN Pedido p ON p.ID_pedido = ip.FK_pedido WHERE p.FK_comanda = ?;";
+
+        try {
+            Connection con = ConexaoDB.getInstancia();
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setInt(1, comandaID);
+
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("total");
+            }
+
+            return 0;
+        
+        }catch(SQLException e){
+            System.out.println("Erro ao calcular total da Comanda: " + e.getMessage());
+            return 0;
+        }
+    }
 }

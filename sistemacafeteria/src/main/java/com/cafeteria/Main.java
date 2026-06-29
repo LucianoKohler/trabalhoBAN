@@ -328,7 +328,8 @@ public class Main {
                 if(c == null){
                     System.out.println("Comanda não encontrada");
                 }else{
-                    System.out.println("FAZER LÓGICA PRA MOSTRAR O PREÇO TOTAL DA COMANDA");
+                    double total = ComandaDAO.calcularTotal(c.getId());
+                    System.out.println("Total: R$ " + total);
                     ComandaDAO.alteraComanda("status_pgto", c.getId(), "PAGA");
                     System.out.println("Checkout concluído!");
                 }
