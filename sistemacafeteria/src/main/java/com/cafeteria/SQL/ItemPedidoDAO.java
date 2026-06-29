@@ -6,22 +6,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 
 import com.cafeteria.dados.ItemPedido;
 
 public class ItemPedidoDAO {
 
-    public static int criaItemPedido(int quantidade, float preco_unitario, String obs, int fkPedido, int fkComanda){
-        String sql = "INSERT INTO Item_pedido (quantidade, preco_unitario, observacao, FK_pedido, FK_comanda) VALUES (?)";
+    public static int criaItemPedido(int quantidade, float preco_unitario, String obs, int fkPedido, int fkProduto){
+        String sql = "INSERT INTO Item_pedido (quantidade, preco_unitario, observacao, FK_pedido, FK_produto) VALUES (?, ?, ?, ?, ?)";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, quantidade);
             st.setFloat(2, preco_unitario);
-            st.setString(3, obs);
+            if(obs.length() == 0){
+                st.setNull(3, Types.VARCHAR);
+            }else{
+                st.setString(3, obs);
+            }
             st.setInt(4, fkPedido);
-            st.setInt(5, fkComanda);
+            st.setInt(5, fkPedido);
             st.executeUpdate();
 
             try (ResultSet rs = st.getGeneratedKeys()) {
