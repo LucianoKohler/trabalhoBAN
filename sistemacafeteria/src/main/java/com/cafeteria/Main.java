@@ -33,19 +33,28 @@ public class Main {
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE INGREDIENTES */
-    public static void mostraTodosIngredientes(){
+    public static int mostraTodosIngredientes(){
         System.out.println("MOSTRANDO TODOS OS INGREDIENTES: ");
         List<Ingrediente> i = IngredienteDAO.selectAll();
+        if(i.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Ingrediente ing : i){
             System.out.println("\t" + ing);
         }
         System.out.println();
+        return 1;
     }
     public static Ingrediente escolheIngrediente(Scanner s){
         System.out.println("Escolha um ingrediente: ");
-        mostraTodosIngredientes();
-        System.out.print("Sua escolha: ");
-        return IngredienteDAO.procuraIngredientePorID(leInt(s));
+        if(mostraTodosIngredientes() == 1){
+            System.out.print("Sua escolha: ");
+            return IngredienteDAO.procuraIngredientePorID(leInt(s));
+        }else{
+            System.out.println("Retornando...");
+            return null;
+        }
     }
     public static void menuEscolhaIngrediente(Scanner s){
         System.out.println("1. Adicionar ingrediente");
@@ -107,18 +116,28 @@ public class Main {
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE PRODUTOS */
-    public static void mostraTodosProdutos(){
+    public static int mostraTodosProdutos(){
+        System.out.println("MOSTRANDO TODOS OS PRODUTOS");
         List<Produto> list = ProdutoDAO.selectAll();
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Produto p : list){
             System.out.println(p);
         }
         System.out.println();
+        return 1;
     }
     public static Produto escolheProduto(Scanner s){
         System.out.println("Escolha um produto: ");
-        mostraTodosProdutos();
-        System.out.print("Sua escolha: ");
-        return ProdutoDAO.procuraProdutoPorID(leInt(s));
+        if(mostraTodosProdutos() == 1){
+            System.out.print("Sua escolha: ");
+            return ProdutoDAO.procuraProdutoPorID(leInt(s));
+        }else{
+            System.out.println("Retornando...");
+            return null;
+        }
     }
     public static void menuEscolhaProduto(Scanner s){
         System.out.println("1. Adicionar produto");
@@ -197,18 +216,28 @@ public class Main {
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE FUNCIONÁRIOS */
-    public static void mostraTodosFuncionarios(){
+    public static int mostraTodosFuncionarios(){
+        System.out.println("MOSTRANDO TODOS OS FUNCIONÁRIOS: ");
         List<Funcionario> list = FuncionarioDAO.selectAll();
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Funcionario f : list){
             System.out.println(f);
         }
         System.out.println();
+        return 1;
     }
     public static Funcionario escolheFuncionario(Scanner s){
         System.out.println("Escolha um Funcionário: ");
-        mostraTodosFuncionarios();
-        System.out.print("Sua escolha: ");
-        return FuncionarioDAO.procuraFuncionarioPorID(leInt(s));
+        if(mostraTodosFuncionarios() == 1){
+            System.out.print("Sua escolha: ");
+            return FuncionarioDAO.procuraFuncionarioPorID(leInt(s));
+        }else{
+            System.out.println("Retornando...");
+            return null;
+        }
     }
     public static void menuEscolhaFuncionario(Scanner s){
         System.out.println("1. Adicionar funcionário");
@@ -266,41 +295,67 @@ public class Main {
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE COMANDAS */
-    public static void mostraTodasComandasAbertas(){
+    public static int mostraTodasComandasAbertas(){
+        System.out.println("MOSTRANDO TODAS AS COMANDAS ABERTAS");
         List<Comanda> list = ComandaDAO.selectAll("aberta");
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Comanda c : list){
             System.out.println(c);
         }
         System.out.println();
+        return 1;
     }
-    public static void mostraTodasComandasPagas(){
+    public static int mostraTodasComandasPagas(){
+        System.out.println("MOSTRANDO TODAS AS COMANDAS PAGAS");
         List<Comanda> list = ComandaDAO.selectAll("paga");
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Comanda c : list){
             System.out.println(c);
         }
         System.out.println();
+        return 1;
     }
-    public static void mostraTodasComandas(){
+    public static int mostraTodasComandas(){
+        System.out.println("MOSTRANDO TODAS AS COMANDAS");
         List<Comanda> list = ComandaDAO.selectAll("");
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Comanda c : list){
             System.out.println(c);
         }
             System.out.println();
+            return 1;
         }
     public static Comanda escolheComanda(Scanner s){
         System.out.println("Escolha uma Comanda: ");
-        mostraTodasComandas();
-        System.out.print("Sua escolha: ");
-        return ComandaDAO.procuraComandaPorID(leInt(s));
+        if(mostraTodasComandas() == 1){
+            System.out.print("Sua escolha: ");
+            return ComandaDAO.procuraComandaPorID(leInt(s));
+        }else{
+            System.out.println("Retornando...");
+            return null;
+        }
     }
     public static Comanda escolheComandaAberta(Scanner s){
         System.out.println("Escolha uma Comanda: ");
-        mostraTodasComandasAbertas();
-        System.out.print("Sua escolha: ");
-        Comanda c = ComandaDAO.procuraComandaPorID(leInt(s));
-        if(c.getStatus_pgto().equals("aberta")){
-            return c;
+        if(mostraTodasComandasAbertas() == 1){
+            System.out.print("Sua escolha: ");
+            Comanda c = ComandaDAO.procuraComandaPorID(leInt(s));
+            if(c.getStatus_pgto().equals("aberta")){
+                return c;
+            }else{
+                System.out.println("Comanda inválida.");
+            }
         }
+        System.out.println("Não há registros para mostrar.");
         return null;
     }
     public static void menuEscolhaComanda(Scanner s){
@@ -364,31 +419,85 @@ public class Main {
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE PEDIDOS */
-    public static void mostraTodosPedidosPendentes(){
+    public static int mostraTodosPedidosPendentes(){
+        System.out.println("MOSTRANDO TODOS OS PEDIDOS PENTENDES");
         List<Pedido> list = PedidoDAO.selectAll("pendente");
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Pedido p : list){
             System.out.println(p);
         }
         System.out.println();
+        return 1;
     }
-    public static void mostraTodosPedidosConcluidos(){
+    public static int mostraTodosPedidosConcluidos(){
+        System.out.println("MOSTRANDO TODOS OS PEIDDOS ATENDIDOS");
         List<Pedido> list = PedidoDAO.selectAll("atendido");
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
         for(Pedido p : list){
             System.out.println(p);
         }
         System.out.println();
+        return 1;
     }
-    public static Pedido escolhePedido(Scanner s){
+    public static int mostraTodosPedidos(){
+        System.out.println("MOSTRANDO TODOS OS PEDIDOS");
+        List<Pedido> list = PedidoDAO.selectAll("");
+        if(list.isEmpty()){
+            System.out.println("Não há registros para mostrar.");
+            return 0;
+        }
+        for(Pedido p : list){
+            System.out.println(p);
+        }
+        System.out.println();
+        return 1;
+
+    }
+    public static Pedido escolhePedidoConcluido(Scanner s){
         System.out.println("Escolha um pedido: ");
-        mostraTodosPedidosPendentes();
-        System.out.print("Sua escolha: ");
-        return PedidoDAO.procuraPedidoPorID(leInt(s));
+        if(mostraTodosPedidosConcluidos() == 1){
+            System.out.print("Sua escolha: ");
+            Pedido p =  PedidoDAO.procuraPedidoPorID(leInt(s));
+            if(p.getStatus_pedido().equals("atendido")){
+                return p;
+            }else{
+                System.out.println("Pedido inválido.");
+            }
+        }else{
+            System.out.println("Retornando...");
+        }
+        return null;
     }
     public static Pedido escolhePedidoPendente(Scanner s){
         System.out.println("Escolha um pedido: ");
-        mostraTodosPedidosPendentes();
-        System.out.print("Sua escolha: ");
-        return PedidoDAO.procuraPedidoPorID(leInt(s));
+        if(mostraTodosPedidosPendentes() == 1){
+            System.out.print("Sua escolha: ");
+            Pedido p =  PedidoDAO.procuraPedidoPorID(leInt(s));
+            if(p.getStatus_pedido().equals("pendente")){
+                return p;
+            }else{
+                System.out.println("Pedido inválido.");
+            }
+        }else{
+            System.out.println("Retornando...");
+        }
+        return null;
+    }
+    public static Pedido escolhePedido(Scanner s){
+        System.out.println("Escolha um pedido: ");
+        if(mostraTodosPedidos() == 1){
+            System.out.print("Sua escolha: ");
+            return PedidoDAO.procuraPedidoPorID(leInt(s));
+        }else{
+            System.out.println("Retornando...");
+            return null;
+        }
     }
     public static void menuEscolhaPedido(Scanner s){
         System.out.println("1. Fazer um pedido");

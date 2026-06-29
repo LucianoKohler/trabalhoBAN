@@ -167,4 +167,5 @@ INSERT INTO Item_pedido (FK_pedido, FK_produto, quantidade, preco_unitario, obse
 (3, 9, 1, 15.00, 'Sabor maçã verde'),     -- 1x Soda Italiana
 
 -- Pedido 4 (Mesa 7)
+(4, 10, 2, 14.50, NULL);                  -- 1x Sanduíche Italiano
 (4, 11, 1, 4.50, 'Natural');              -- 1x Água
