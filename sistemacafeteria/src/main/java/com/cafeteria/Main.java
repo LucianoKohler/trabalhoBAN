@@ -2,6 +2,7 @@ package com.cafeteria;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -89,11 +90,12 @@ public class Main {
                 return;
             case 4:
                 System.out.println("Digite o id do ingrediente a ser mostrado:");
-                Ingrediente i = escolheIngrediente(s);
+                Ingrediente i = IngredienteDAO.procuraIngredientePorID(leInt(s));
                 if(i == null){
-                    System.out.println("Id Invalido");
+                    System.out.println("Produto não encontrado");
                 }else{
-                    System.out.println(i);
+                    System.out.println("Ingrediente encontrado: ");
+                    System.out.println("\t" + i);
                 }
 
                 return;
@@ -123,7 +125,7 @@ public class Main {
         System.out.println("1. Adicionar produto");
         System.out.println("2. Remover produto");
         System.out.println("3. Mostrar todos os produtos");
-        System.out.println("4. Mostrar um produto");
+        System.out.println("4. Mostrar a receita de um produto");
         System.out.println("5. Voltar");
            
         int escolha = Integer.parseInt(leString(s));
@@ -156,6 +158,8 @@ public class Main {
                             InfoProdutoDAO.criaInfoProduto(qtd, desc, ing.getId(), idNovoProduto);
                             System.out.println("Adicionar outro ingrediente? (1: Sim, 2: Não)");
                             escolhaIngrediente = leInt(s);
+                        }else{
+                            System.out.println("Ingrediente inválido!");
                         }
                     }
                 }
@@ -172,10 +176,17 @@ public class Main {
                 mostraTodosProdutos();
                 return;
             case 4:
-                System.out.println("Digite o id do produto a ser mostrado:");
-                int idd = leInt(s);
-                Produto prod = ProdutoDAO.procuraProdutoPorID(idd);
-                System.out.println(prod);
+                System.out.println("Digite o id do produto a ser listado:");
+                Produto prod = escolheProduto(s);
+                if(prod == null){
+                    System.out.println("Produto inválido");
+                }else{
+                    System.out.println("Receita de: " + prod.getNome());
+                    List<Ingrediente>ings = InfoProdutoDAO.buscaIngredientesDeUmProduto(prod.getId());
+                    for(Ingrediente i : ings){
+                        System.out.println("\t" + i.getNome());
+                    }
+                }
                 return;
             case 5:
                 return;
@@ -240,8 +251,11 @@ public class Main {
                 System.out.println("Digite o id do funcionário a ser mostrado:");
                 int idd = Integer.parseInt(leString(s));
                 Funcionario func = FuncionarioDAO.procuraFuncionarioPorID(idd);
-
-                System.out.println(func);
+                if(func == null){
+                    System.out.println("Funcionário não encontrado");
+                }else{
+                    System.out.println(func);
+                }
                 return;
             case 5:
                 return;
@@ -285,10 +299,10 @@ public class Main {
         mostraTodasComandasAbertas();
         System.out.print("Sua escolha: ");
         Comanda c = ComandaDAO.procuraComandaPorID(leInt(s));
-        if(c.getStatus_pgto() != "ABERTA"){
-            return null;
+        if(c.getStatus_pgto().equals("ABERTA")){
+            return c;
         }
-        return c;
+        return null;
     }
     public static void menuEscolhaComanda(Scanner s){
         System.out.println("1. Criar comanda");
@@ -309,15 +323,20 @@ public class Main {
                 ComandaDAO.criaComanda(numero);
                 return;
             case 2:
-                System.out.println("Escolha a comanda à se fazer checkout:");
-                int id = leInt(s);
-                System.out.println("FAZER LÓGICA PRA MOSTRAR O PREÇO TOTAL DA COMANDA");
-                ComandaDAO.alteraComanda("status_pgto", id, "PAGA");
+                Comanda c = escolheComandaAberta(s);
+
+                if(c == null){
+                    System.out.println("Comanda não encontrada");
+                }else{
+                    System.out.println("FAZER LÓGICA PRA MOSTRAR O PREÇO TOTAL DA COMANDA");
+                    ComandaDAO.alteraComanda("status_pgto", c.getId(), "PAGA");
+                    System.out.println("Checkout concluído!");
+                }
                 return;
             case 3:
                 System.out.println("Escolha uma comanda para remover: ");
-                Comanda c = escolheComanda(s);
-                ComandaDAO.deletaComandaPorID(c.getId());
+                Comanda com = escolheComanda(s);
+                ComandaDAO.deletaComandaPorID(com.getId());
                 return;
             case 4:
                 mostraTodasComandasAbertas();
@@ -416,10 +435,18 @@ public class Main {
                 Pedido p = escolhePedidoPendente(s);
                 if(p == null || p.getStatus_pedido() == "ATENDIDO"){
                     System.out.println("Pedido inválido");
-                }else{
-                    PedidoDAO.alteraPedido("status_pedido", p.getId(), "ATENDIDO");
+                    return;
                 }
-                break;
+                System.out.println("Que funcionário atenderá o pedido? ");
+                Funcionario f = escolheFuncionario(s);
+                if(f == null){
+                    System.out.println("Funcionário inválido");
+                    return;
+                }
+                    PedidoDAO.alteraPedido("FK_funcionario", p.getId(), String.valueOf(f.getId()));
+                    PedidoDAO.alteraPedido("status_pedido", p.getId(), "ATENDIDO");
+                
+                    break;
                 case 3:
                 System.out.println("Escolha o pedido à ser cancelado: ");
                 Pedido p1 = escolhePedidoPendente(s);
@@ -505,8 +532,10 @@ public class Main {
                 menuEscolhaFuncionario(s);
                 break;
             case 4:
+                menuEscolhaComanda(s);
                 break;
             case 5:
+                menuEscolhaPedido(s);
                 break;
             case 6:
                 System.out.println("Até mais!");
