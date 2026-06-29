@@ -24,10 +24,9 @@ CREATE TABLE Funcionario(
 	nome varchar(40),
 	salario float,
 	data_contratacao date,
-	cargo varchar(20)
+	cargo varchar(20),
+    CONSTRAINT check_cargo CHECK (cargo IN ('BARISTA', 'GERENTE', 'FAXINEIRO'))
 );
-ALTER TABLE Funcionario ADD CONSTRAINT check_cargo
-CHECK (cargo IN ('BARISTA', 'GERENTE', 'FAXINEIRO'));
 
 CREATE TABLE Ingrediente(
 	ID_ingrediente SERIAL PRIMARY KEY,
@@ -41,19 +40,17 @@ CREATE TABLE Produto(
 	ID_produto SERIAL PRIMARY KEY,
 	nome varchar(40),
 	preco float,
-	categoria varchar(20)
+	categoria varchar(20),
+    CONSTRAINT check_categoria CHECK (categoria IN ('BEBIDA_QUENTE', 'BEBIDA_FRIA', 'SALGADO', 'DOCE', 'BOLO', 'OUTROS'))
 );
-ALTER TABLE Produto ADD CONSTRAINT check_categoria
-CHECK (categoria IN ('BEBIDA_QUENTE', 'BEBIDA_FRIA', 'SALGADO', 'DOCE', 'BOLO', 'OUTROS'));
 
 CREATE TABLE Comanda(
 	ID_comanda SERIAL PRIMARY KEY,
 	numero_mesa int,
 	data_hora_abertura timestamp default CURRENT_TIMESTAMP,
-	status_pgto varchar(20)
+	status_pgto varchar(20),
+    CONSTRAINT check_status_pgto CHECK (status_pgto IN ('ABERTA', 'PAGA'))
 );
-ALTER TABLE Comanda ADD CONSTRAINT check_status_pgto
-CHECK (status_pgto IN ('ABERTA', 'PAGA'));
 
 CREATE TABLE Pedido(
 	ID_pedido SERIAL PRIMARY KEY,
@@ -62,11 +59,10 @@ CREATE TABLE Pedido(
 	FK_comanda int,
 	FK_funcionario int,
 
-	FOREIGN KEY (FK_comanda) REFERENCES Comanda(ID_comanda),
-	FOREIGN KEY (FK_funcionario) REFERENCES Funcionario(ID_funcionario)
+    CONSTRAINT fk_pedido_comanda FOREIGN KEY (FK_comanda) REFERENCES Comanda(ID_comanda) ON DELETE CASCADE,
+    CONSTRAINT fk_pedido_funcionario FOREIGN KEY (FK_funcionario) REFERENCES Funcionario(ID_funcionario) ON DELETE SET NULL,
+    CONSTRAINT check_status CHECK (status_pedido IN ('PENDENTE', 'EM_PREPARO', 'ATENDIDO', 'CANCELADO'))
 );
-ALTER TABLE Pedido ADD CONSTRAINT check_status 
-CHECK (status_pedido IN ('PENDENTE', 'EM_PREPARO', 'ATENDIDO', 'CANCELADO'));
 
 CREATE TABLE Info_produto(
 	ID_info_produto SERIAL PRIMARY KEY,
@@ -75,8 +71,8 @@ CREATE TABLE Info_produto(
 	FK_ingrediente int,
 	FK_produto int,
 
-	FOREIGN KEY (FK_ingrediente) REFERENCES Ingrediente(ID_ingrediente),
-	FOREIGN KEY (FK_produto) REFERENCES Produto(ID_produto)
+    CONSTRAINT fk_info_ingrediente FOREIGN KEY (FK_ingrediente) REFERENCES Ingrediente(ID_ingrediente) ON DELETE CASCADE,
+    CONSTRAINT fk_info_produto FOREIGN KEY (FK_produto) REFERENCES Produto(ID_produto) ON DELETE CASCADE
 );
 
 CREATE TABLE Item_pedido(
@@ -87,6 +83,6 @@ CREATE TABLE Item_pedido(
 	FK_pedido int,
 	FK_produto int,
 
-	FOREIGN KEY (FK_pedido) REFERENCES Pedido(ID_pedido),
-	FOREIGN KEY (FK_produto) REFERENCES Produto(ID_produto)
+    CONSTRAINT fk_item_pedido FOREIGN KEY (FK_pedido) REFERENCES Pedido(ID_pedido) ON DELETE CASCADE,
+    CONSTRAINT fk_item_produto FOREIGN KEY (FK_produto) REFERENCES Produto(ID_produto) ON DELETE CASCADE
 );

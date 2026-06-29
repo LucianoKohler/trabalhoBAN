@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 
 import com.cafeteria.dados.Pedido;

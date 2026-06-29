@@ -9,6 +9,7 @@ import com.cafeteria.SQL.InfoProdutoDAO;
 import com.cafeteria.SQL.ComandaDAO;
 import com.cafeteria.SQL.FuncionarioDAO;
 import com.cafeteria.SQL.IngredienteDAO;
+import com.cafeteria.SQL.ItemPedidoDAO;
 import com.cafeteria.SQL.PedidoDAO;
 import com.cafeteria.SQL.ProdutoDAO;
 import com.cafeteria.dados.Comanda;
@@ -22,11 +23,9 @@ public class Main {
     public static void main(String args[]){
         Scanner s = new Scanner(System.in);
 
-        while(true){
-            int escolha = menu(s);
-            if(escolha == -1){
-                break;
-            }
+        int e = 1;
+        while(e == 1){
+            e = menu(s);
         }
 
         s.close();
@@ -35,17 +34,18 @@ public class Main {
 
     /* AUXILIARES + FUNÇÕES SOBRE INGREDIENTES */
     public static void mostraTodosIngredientes(){
+        System.out.println("MOSTRANDO TODOS OS INGREDIENTES: ");
         List<Ingrediente> i = IngredienteDAO.selectAll();
         for(Ingrediente ing : i){
-            System.out.println(ing);
+            System.out.println("\t" + ing);
         }
         System.out.println();
     }
-    public static int escolheIngrediente(Scanner s){
+    public static Ingrediente escolheIngrediente(Scanner s){
         System.out.println("Escolha um ingrediente: ");
         mostraTodosIngredientes();
         System.out.print("Sua escolha: ");
-        return s.nextInt();
+        return IngredienteDAO.procuraIngredientePorID(leInt(s));
     }
     public static void menuEscolhaIngrediente(Scanner s){
         System.out.println("1. Adicionar ingrediente");
@@ -54,50 +54,54 @@ public class Main {
         System.out.println("4. Mostrar um ingrediente");
         System.out.println("5. Voltar");
            
-        int escolha = Integer.parseInt(s.nextLine());
+        int escolha = Integer.parseInt(leString(s));
 
         switch (escolha) {
             case 1:
                 Ingrediente novoIng = new Ingrediente();
                 System.out.println("Digite o nome do ingrediente:");
-                String nome = s.nextLine();
+                String nome = leString(s);
                 novoIng.setNome(nome);
                 System.out.println("Digite a descrição do ingrediente:");
-                String desc = s.nextLine();
+                String desc = leString(s);
                 novoIng.setDescricao(desc);
                 System.out.println("Digite a quantidade do ingrediente:");
-                float quant = Float.parseFloat(s.nextLine());
+                float quant = Float.parseFloat(leString(s));
                 novoIng.setQuantidade(quant);
                 System.out.println("Digite a unidade de medida da quantidade:");
-                String unidade = s.nextLine();
+                String unidade = leString(s);
                 novoIng.setUnidade_medida(unidade);
 
                 IngredienteDAO.insereIngrediente(novoIng);
 
                 return;
             case 2:
-                mostraTodosIngredientes();
                 System.out.println("Digite o id do ingrediente a ser removido:");
-                int id = Integer.parseInt(s.nextLine());
-
-                IngredienteDAO.deletaIngredientePorID(id);
+                Ingrediente ing = escolheIngrediente(s);
+                if(ing == null){
+                    System.out.println("Ingrediente inválido");
+                }else{    
+                    IngredienteDAO.deletaIngredientePorID(ing.getId());
+                }
                 return;
             case 3:
                 mostraTodosIngredientes();
                 return;
             case 4:
                 System.out.println("Digite o id do ingrediente a ser mostrado:");
-                int idd = Integer.parseInt(s.nextLine());
-                Ingrediente ing = IngredienteDAO.procuraIngredientePorID(idd);
+                Ingrediente i = escolheIngrediente(s);
+                if(i == null){
+                    System.out.println("Id Invalido");
+                }else{
+                    System.out.println(i);
+                }
 
-                System.out.println(ing);
                 return;
             case 5:
                 return;
             default:
                 System.out.println("Entrada inválida!");
                 return;
-
         }
     }
 
@@ -109,11 +113,11 @@ public class Main {
         }
         System.out.println();
     }
-    public static int escolheProduto(Scanner s){
+    public static Produto escolheProduto(Scanner s){
         System.out.println("Escolha um produto: ");
         mostraTodosProdutos();
         System.out.print("Sua escolha: ");
-        return s.nextInt();
+        return ProdutoDAO.procuraProdutoPorID(leInt(s));
     }
     public static void menuEscolhaProduto(Scanner s){
         System.out.println("1. Adicionar produto");
@@ -122,50 +126,54 @@ public class Main {
         System.out.println("4. Mostrar um produto");
         System.out.println("5. Voltar");
            
-        int escolha = Integer.parseInt(s.nextLine());
+        int escolha = Integer.parseInt(leString(s));
 
         switch (escolha) {
             case 1:
                 Produto novoProd = new Produto();
                 System.out.println("Digite o nome do produto:");
-                String nome = s.nextLine();
+                String nome = leString(s);
                 novoProd.setNome(nome);
                 System.out.println("Digite o preço do produto:");
-                float preco = Float.parseFloat(s.nextLine());
+                float preco = Float.parseFloat(leString(s));
                 novoProd.setPreco(preco);
                 System.out.println("Digite a categoria do produto:");
-                String categoria = s.nextLine();
+                String categoria = leString(s);
                 novoProd.setCategoria(categoria);
 
                 int idNovoProduto = ProdutoDAO.insereProduto(novoProd);
 
                 if(idNovoProduto != -1){
                     System.out.println("Deseja adicionar os ingredientes do produto? (1: Sim, 2: Não)");
-                    int escolhaIngrediente = s.nextInt();
+                    int escolhaIngrediente = leInt(s);
                     while(escolhaIngrediente == 1){
-                        int ingredienteID = escolheIngrediente(s);
-                        if(IngredienteDAO.procuraIngredientePorID(ingredienteID) != null) {
+                        Ingrediente ing = escolheIngrediente(s);
+                        if(ing != null) {
                             System.out.println("Insira a quantidade de ingrediente necessário: ");
-                            float qtd = s.nextFloat();
+                            float qtd = leFloat(s);
                             System.out.print("Insira observações sobre o uso do ingrediente (ou deixe vazio): ");
-                            String desc = s.nextLine();
-                            InfoProdutoDAO.criaInfoProduto(qtd, desc, ingredienteID, idNovoProduto);
+                            String desc = leString(s);
+                            InfoProdutoDAO.criaInfoProduto(qtd, desc, ing.getId(), idNovoProduto);
                             System.out.println("Adicionar outro ingrediente? (1: Sim, 2: Não)");
-                            escolhaIngrediente = s.nextInt();
+                            escolhaIngrediente = leInt(s);
                         }
                     }
                 }
                 return;
             case 2:
-                int id = escolheProduto(s);
-                ProdutoDAO.deletaProdutoPorID(id);
+                Produto p = escolheProduto(s);
+                if(p == null){
+                    System.out.println("Produto inválido");
+                }else{
+                    ProdutoDAO.deletaProdutoPorID(p.getId());
+                }
                 return;
             case 3:
                 mostraTodosProdutos();
                 return;
             case 4:
                 System.out.println("Digite o id do produto a ser mostrado:");
-                int idd = s.nextInt();
+                int idd = leInt(s);
                 Produto prod = ProdutoDAO.procuraProdutoPorID(idd);
                 System.out.println(prod);
                 return;
@@ -186,11 +194,11 @@ public class Main {
         }
         System.out.println();
     }
-    public static int escolheFuncionario(Scanner s){
+    public static Funcionario escolheFuncionario(Scanner s){
         System.out.println("Escolha um Funcionário: ");
         mostraTodosFuncionarios();
         System.out.print("Sua escolha: ");
-        return s.nextInt();
+        return FuncionarioDAO.procuraFuncionarioPorID(leInt(s));
     }
     public static void menuEscolhaFuncionario(Scanner s){
         System.out.println("1. Adicionar funcionário");
@@ -199,38 +207,38 @@ public class Main {
         System.out.println("4. Mostrar um funcionário");
         System.out.println("5. Voltar");
            
-        int escolha = Integer.parseInt(s.nextLine());
+        int escolha = Integer.parseInt(leString(s));
 
         switch (escolha) {
             case 1:
                 Funcionario novoFunc = new Funcionario();
                 System.out.println("Digite o nome do funcionário:");
-                String nome = s.nextLine();
+                String nome = leString(s);
                 novoFunc.setNome(nome);
                 System.out.println("Digite o salário do funcionário:");
-                float salario = Float.parseFloat(s.nextLine());
+                float salario = Float.parseFloat(leString(s));
                 novoFunc.setSalario(salario);
                 System.out.println("Digite a data de contratação do funcionário no formato dd/mm/aaaa:");
-                String entrada = s.nextLine();
+                String entrada = leString(s);
                 DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate data = LocalDate.parse(entrada, fmt);
                 novoFunc.setData_contratacao(data);
                 System.out.println("Digite o cargo do funcionário:");
-                String cargo = s.nextLine();
+                String cargo = leString(s);
                 novoFunc.setCargo(cargo);
 
                 FuncionarioDAO.insereFuncionario(novoFunc);
                 return;
             case 2:
-                int id = escolheFuncionario(s);
-                FuncionarioDAO.deletaFuncionarioPorID(id);
+                Funcionario f = escolheFuncionario(s);
+                FuncionarioDAO.deletaFuncionarioPorID(f.getId());
                 return;
             case 3:
                 mostraTodosFuncionarios();
                 return;
             case 4:
                 System.out.println("Digite o id do funcionário a ser mostrado:");
-                int idd = Integer.parseInt(s.nextLine());
+                int idd = Integer.parseInt(leString(s));
                 Funcionario func = FuncionarioDAO.procuraFuncionarioPorID(idd);
 
                 System.out.println(func);
@@ -266,18 +274,21 @@ public class Main {
         }
             System.out.println();
         }
-    public static int escolheComanda(Scanner s){
+    public static Comanda escolheComanda(Scanner s){
         System.out.println("Escolha uma Comanda: ");
         mostraTodasComandas();
         System.out.print("Sua escolha: ");
-        return s.nextInt();
+        return ComandaDAO.procuraComandaPorID(leInt(s));
     }
-    public static int escolheComandaAberta(Scanner s){
+    public static Comanda escolheComandaAberta(Scanner s){
         System.out.println("Escolha uma Comanda: ");
         mostraTodasComandasAbertas();
         System.out.print("Sua escolha: ");
-        return s.nextInt();
-
+        Comanda c = ComandaDAO.procuraComandaPorID(leInt(s));
+        if(c.getStatus_pgto() != "ABERTA"){
+            return null;
+        }
+        return c;
     }
     public static void menuEscolhaComanda(Scanner s){
         System.out.println("1. Criar comanda");
@@ -288,24 +299,25 @@ public class Main {
         System.out.println("6. Mostrar uma comanda");
         System.out.println("7. Voltar");
            
-        int escolha = s.nextInt();
+        int escolha = leInt(s);
 
         switch (escolha) {
             case 1:
                 System.out.println("Digite o número da mesa da comanda:");
-                int numero = s.nextInt();
+                int numero = leInt(s);
 
                 ComandaDAO.criaComanda(numero);
                 return;
             case 2:
                 System.out.println("Escolha a comanda à se fazer checkout:");
-                int id = s.nextInt();
+                int id = leInt(s);
+                System.out.println("FAZER LÓGICA PRA MOSTRAR O PREÇO TOTAL DA COMANDA");
                 ComandaDAO.alteraComanda("status_pgto", id, "PAGA");
                 return;
             case 3:
                 System.out.println("Escolha uma comanda para remover: ");
-                int idd = escolheComanda(s);
-                ComandaDAO.deletaComandaPorID(idd);
+                Comanda c = escolheComanda(s);
+                ComandaDAO.deletaComandaPorID(c.getId());
                 return;
             case 4:
                 mostraTodasComandasAbertas();
@@ -315,8 +327,13 @@ public class Main {
                 return;
             case 6:
                 System.out.println("Insira o ID da comanda a ser mostrada: ");
-                int iddd = s.nextInt();
-                ComandaDAO.procuraComandaPorID(iddd);
+                int cId = leInt(s);
+                Comanda encontrada = ComandaDAO.procuraComandaPorID(cId);
+                if(encontrada == null){
+                    System.out.println("Comanda não encontrada");
+                }else{
+                    System.out.println(encontrada);
+                }
                 return;
             case 7:
                 return;
@@ -342,17 +359,17 @@ public class Main {
         }
         System.out.println();
     }
-    public static int escolhePedido(Scanner s){
+    public static Pedido escolhePedido(Scanner s){
         System.out.println("Escolha um pedido: ");
         mostraTodosPedidosPendentes();
         System.out.print("Sua escolha: ");
-        return s.nextInt();
+        return PedidoDAO.procuraPedidoPorID(leInt(s));
     }
-    public static int escolhePedidoPendente(Scanner s){
+    public static Pedido escolhePedidoPendente(Scanner s){
         System.out.println("Escolha um pedido: ");
         mostraTodosPedidosPendentes();
         System.out.print("Sua escolha: ");
-        return s.nextInt();
+        return PedidoDAO.procuraPedidoPorID(leInt(s));
     }
     public static void menuEscolhaPedido(Scanner s){
         System.out.println("1. Fazer um pedido");
@@ -364,34 +381,62 @@ public class Main {
         System.out.println("7. Alterar itens de um pedido");
         System.out.println("8. Voltar");
 
-        int escolha = s.nextInt();
+        int escolha = leInt(s);
 
         switch (escolha) {
             case 1:
                 System.out.println("Qual comanda fez o pedido?");
-                int idComanda = escolheComandaAberta(s);
-                int novoPedidoID = PedidoDAO.criaPedido(idComanda);
+                Comanda c = escolheComandaAberta(s);
+                if(c == null){
+                    System.out.println("Comanda inválida");
+                    return;
+                }
+                int novoPedidoID = PedidoDAO.criaPedido(c.getId());
                 int escolhaPedido = 1;
                 while(escolhaPedido == 1){
                     System.out.println("Insira o produto pedido: ");
-                    // FAZER A LÓGICA
-                    System.out.println("Quer adicionar outro produto no pedido?");
+                    Produto p = escolheProduto(s);
+                    if(p == null){
+                        System.out.println("Escolha de produto inválida!");
+                        continue;
+                    }
+                    System.out.println("Você quer quantos desse item?");
+                    int qtd = leInt(s);
+                    System.out.println("Insira observações sobre o item (ou deixe vazio):");
+                    String obs = leString(s);
+
+                    ItemPedidoDAO.criaItemPedido(qtd, p.getPreco(), obs, novoPedidoID, p.getId());
+
+                    System.out.println("Criado! Quer adicionar outro produto no pedido?");
+                    escolhaPedido = leInt(s);
                 }
                 break;
             case 2:
                 System.out.println("Escolha o pedido à ser concluído: ");
-                int id = escolhePedidoPendente(s);
-                PedidoDAO.alteraPedido("status_pedido", id, "ATENDIDO");
+                Pedido p = escolhePedidoPendente(s);
+                if(p == null || p.getStatus_pedido() == "ATENDIDO"){
+                    System.out.println("Pedido inválido");
+                }else{
+                    PedidoDAO.alteraPedido("status_pedido", p.getId(), "ATENDIDO");
+                }
                 break;
                 case 3:
                 System.out.println("Escolha o pedido à ser cancelado: ");
-                int idd = escolhePedidoPendente(s);
-                PedidoDAO.alteraPedido("status_pedido", idd, "CANCELADO");
+                Pedido p1 = escolhePedidoPendente(s);
+                if(p1 == null || p1.getStatus_pedido() == "ATENDIDO"){
+                    System.out.println("Pedido inválido");
+                }else{
+                    PedidoDAO.alteraPedido("status_pedido", p1.getId(), "CANCELADO");
+                }
                 break;
             case 4:
                 System.out.println("Escolha o pedido à ser deletado: ");
-                int iddd = escolhePedido(s);
-                PedidoDAO.deletaPedidoPorID(iddd);
+                Pedido p2 = escolhePedido(s);
+                if(p2 == null){
+                    System.out.println("Pedido inválido");
+                }else{
+                    PedidoDAO.deletaPedidoPorID(p2.getId());
+                }
                 break;
             case 5:
                 mostraTodosPedidosPendentes();
@@ -400,7 +445,34 @@ public class Main {
                 mostraTodosPedidosConcluidos();
                 break;
             case 7:
-                System.out.println("Falta fazer essa bomba...");
+                System.out.println("Escolha um pedido para alterar a lista: ");
+                Pedido p3 = escolhePedidoPendente(s);
+                if(p3 == null || p3.getStatus_pedido() == "ATENDIDO"){
+                    System.out.println("Pedido inválido");
+                }else{
+                    System.out.println("O que você quer alterar do pedido? ");
+                    System.out.println("1. Quantidade");
+                    System.out.println("2. Observação");
+                    System.out.println("3. Produto");
+                    System.out.print("Sua escolha: ");
+                    int escolhaAlteracao = leInt(s);
+                    if(escolhaAlteracao == 1) {
+                        System.out.println("Insira a nova quantidade: ");
+                        String novaQtd = leString(s);
+                        ItemPedidoDAO.alteraItemPedido("quantidade", p3.getId(), novaQtd);
+                    }else if(escolhaAlteracao == 2){
+                        System.out.println("Insira a nova observação (ou deixe em branco):");
+                        String novaObs = leString(s);
+                        ItemPedidoDAO.alteraItemPedido("observacao", p3.getId(), novaObs);
+                    }else{
+                        System.out.println("Escolha o novo item: ");
+                        Produto prod = escolheProduto(s);
+                        if(prod == null){
+                            System.out.println("Item novo inválido.");
+                        }else{
+                            ItemPedidoDAO.alteraItemPedido("FK_produto", p3.getId(), String.valueOf(prod.getId()));                        }
+                    }
+                }
                 break;
         
             default:
@@ -411,6 +483,7 @@ public class Main {
     }
 
     public static int menu(Scanner s){
+        System.out.println("---------------------------------");
         System.out.println(".o°o.o°o.o° CAFETERIA °o.o°o.o°o.");
         System.out.println("1. Opções com Ingredientes");
         System.out.println("2. Opções com Produtos");
@@ -419,33 +492,46 @@ public class Main {
         System.out.println("5. Opções com Pedido");
         System.out.println("6. Sair do Programa");
         
-        int escolha = Integer.parseInt(s.nextLine());
+        int escolha = Integer.parseInt(leString(s));
 
         switch (escolha) {
             case 1:
-                System.out.println("Escolhas com Ingredientes");
                 menuEscolhaIngrediente(s);
-                return 0;
+                break;
             case 2:
-                System.out.println("Escolhas com Produtos");
                 menuEscolhaProduto(s);
-                return 0;
+                break;
             case 3:
-                System.out.println("Escolhas Funcionários");
                 menuEscolhaFuncionario(s);
-                return 0;
+                break;
             case 4:
-                System.out.println("Escolhas com Comanda");
-                return 0;
+                break;
             case 5:
-                System.out.println("Escolhas com Pedidos!");
-                return -1;
+                break;
             case 6:
                 System.out.println("Até mais!");
-                return -1;
+                return 0;
             default:
                 System.out.println("Entrada inválida!");
-                return 0;
+                break;
         }
+        return 1;
+    }
+
+    public static int leInt(Scanner s){
+        int n = s.nextInt();
+        s.nextLine();
+        return n;
+    }
+
+    public static float leFloat(Scanner s){
+        float n = s.nextFloat();
+        s.nextLine();
+        return n;
+    }
+
+    public static String leString(Scanner s){
+        String n = s.nextLine();
+        return n;
     }
 }

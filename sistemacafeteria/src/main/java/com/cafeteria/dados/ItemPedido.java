@@ -2,20 +2,20 @@ package com.cafeteria.dados;
 
 public class ItemPedido {
     private int id;
-    private Pedido pedido;
-    private Produto produto;
     private int quantidade;
     private float preco_unitario;
     private String observacao;
+    private int pedido;
+    private int produto;
 
     /* Construtor */
-    public ItemPedido(int id, Pedido pedido, Produto produto, int quantidade, float preco_unitario, String observacao) {
+    public ItemPedido(int id, int quantidade, float preco_unitario, String observacao, int pedido, int produto) {
         this.id = id;
-        this.pedido = pedido;
-        this.produto = produto;
         this.quantidade = quantidade;
         this.preco_unitario = preco_unitario;
         this.observacao = observacao;
+        this.pedido = pedido;
+        this.produto = produto;
     }
 
     /* Gets e Sets */
@@ -26,17 +26,17 @@ public class ItemPedido {
         this.id = id;
     }
 
-    public Pedido getPedido() {
+    public int getPedido() {
         return pedido;
     }
-    public void setPedido(Pedido pedido) {
+    public void setPedido(int pedido) {
         this.pedido = pedido;
     }
 
-    public Produto getProduto() {
+    public int getProduto() {
         return produto;
     }
-    public void setProduto(Produto produto) {
+    public void setProduto(int produto) {
         this.produto = produto;
     }
 
@@ -64,7 +64,7 @@ public class ItemPedido {
 
     public String toString(){
         StringBuffer s = new StringBuffer();
-        s.append("ID: " + id + "\nProduto: " + produto.getNome() +
+        s.append("ID: " + id + "\nProduto: " + produto +
         "\nQuantidade: " + quantidade + "\n Do pedido: " + pedido + 
         "\nPreço unitário: " + preco_unitario + "\nObservações: " + observacao);
         
