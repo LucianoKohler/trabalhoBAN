@@ -6,19 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 
 import com.cafeteria.dados.Pedido;
 
 public class PedidoDAO {
 
-    public static int criaPedido(int fkComanda, int fkFuncionario){
-        String sql = "INSERT INTO Pedido (FK_comanda, FK_funcionario) VALUES (?, ?)";
+    public static int criaPedido(int fkComanda){
+        String sql = "INSERT INTO Pedido (FK_comanda) VALUES (?)";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, fkComanda);
-            st.setInt(1, fkFuncionario);
             st.executeUpdate();
 
             try (ResultSet rs = st.getGeneratedKeys()) {
@@ -38,8 +38,8 @@ public class PedidoDAO {
         }
     }
 
-    public static Pedido procuraProdutoPorID(int pID){
-        String sql = "SELECT * FROM Pedido WHERE ID_produto = ?";
+    public static Pedido procuraPedidoPorID(int pID){
+        String sql = "SELECT * FROM Pedido WHERE ID_pedido = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
@@ -87,7 +87,7 @@ public class PedidoDAO {
         }
     }
 
-    public static Boolean deletaProdutoPorID(int pID){
+    public static Boolean deletaPedidoPorID(int pID){
         String sql = "DELETE FROM Pedido WHERE ID_pedido = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
@@ -110,7 +110,7 @@ public class PedidoDAO {
     }
 
     public static Boolean alteraPedido(String campoAlterado, int pedidoID, String novoAtributo){
-        String sql = "UPDATE Pedido SET " + campoAlterado + " = ? WHERE ID_produto = ?";
+        String sql = "UPDATE Pedido SET " + campoAlterado + " = ? WHERE ID_pedido = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);

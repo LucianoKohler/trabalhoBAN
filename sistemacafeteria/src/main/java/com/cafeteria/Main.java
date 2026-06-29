@@ -30,6 +30,7 @@ public class Main {
         }
 
         s.close();
+
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE INGREDIENTES */
@@ -177,7 +178,21 @@ public class Main {
         }
     }
 
-    public static void EscolhaFuncionario(Scanner s){
+    /* AUXILIARES + FUNÇÕES SOBRE FUNCIONÁRIOS */
+    public static void mostraTodosFuncionarios(){
+        List<Funcionario> list = FuncionarioDAO.selectAll();
+        for(Funcionario f : list){
+            System.out.println(f);
+        }
+        System.out.println();
+    }
+    public static int escolheFuncionario(Scanner s){
+        System.out.println("Escolha um Funcionário: ");
+        mostraTodosFuncionarios();
+        System.out.print("Sua escolha: ");
+        return s.nextInt();
+    }
+    public static void menuEscolhaFuncionario(Scanner s){
         System.out.println("1. Adicionar funcionário");
         System.out.println("2. Remover funcionário");
         System.out.println("3. Mostrar todos os funcionários");
@@ -195,7 +210,7 @@ public class Main {
                 System.out.println("Digite o salário do funcionário:");
                 float salario = Float.parseFloat(s.nextLine());
                 novoFunc.setSalario(salario);
-                System.out.println("Digite a data de contratação do funcionário:");
+                System.out.println("Digite a data de contratação do funcionário no formato dd/mm/aaaa:");
                 String entrada = s.nextLine();
                 DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 LocalDate data = LocalDate.parse(entrada, fmt);
@@ -205,19 +220,13 @@ public class Main {
                 novoFunc.setCargo(cargo);
 
                 FuncionarioDAO.insereFuncionario(novoFunc);
-
                 return;
             case 2:
-                System.out.println("Digite o id do funcionário a ser removido:");
-                int id = Integer.parseInt(s.nextLine());
-
+                int id = escolheFuncionario(s);
                 FuncionarioDAO.deletaFuncionarioPorID(id);
                 return;
             case 3:
-                List<Funcionario> f = FuncionarioDAO.selectAll();
-                for(Funcionario func : f){
-                    System.out.println(func);
-                }
+                mostraTodosFuncionarios();
                 return;
             case 4:
                 System.out.println("Digite o id do funcionário a ser mostrado:");
@@ -235,42 +244,81 @@ public class Main {
            }
     }
 
-    public static void EscolhaComanda(Scanner s){
-        System.out.println("1. Adicionar comanda");
-        System.out.println("2. Remover comanda");
-        System.out.println("3. Mostrar todos as comandas");
-        System.out.println("4. Mostrar uma comanda");
-        System.out.println("5. Voltar");
+    /* AUXILIARES + FUNÇÕES SOBRE COMANDAS */
+    public static void mostraTodasComandasAbertas(){
+        List<Comanda> list = ComandaDAO.selectAll("ABERTA");
+        for(Comanda c : list){
+            System.out.println(c);
+        }
+        System.out.println();
+    }
+    public static void mostraTodasComandasPagas(){
+        List<Comanda> list = ComandaDAO.selectAll("PAGA");
+        for(Comanda c : list){
+            System.out.println(c);
+        }
+        System.out.println();
+    }
+    public static void mostraTodasComandas(){
+        List<Comanda> list = ComandaDAO.selectAll("");
+        for(Comanda c : list){
+            System.out.println(c);
+        }
+            System.out.println();
+        }
+    public static int escolheComanda(Scanner s){
+        System.out.println("Escolha uma Comanda: ");
+        mostraTodasComandas();
+        System.out.print("Sua escolha: ");
+        return s.nextInt();
+    }
+    public static int escolheComandaAberta(Scanner s){
+        System.out.println("Escolha uma Comanda: ");
+        mostraTodasComandasAbertas();
+        System.out.print("Sua escolha: ");
+        return s.nextInt();
+
+    }
+    public static void menuEscolhaComanda(Scanner s){
+        System.out.println("1. Criar comanda");
+        System.out.println("2. Fazer checkout de uma comanda");
+        System.out.println("3. Remover comanda");
+        System.out.println("4. Mostrar todas as comandas abertas");
+        System.out.println("5. Mostrar todas as comandas pagas");
+        System.out.println("6. Mostrar uma comanda");
+        System.out.println("7. Voltar");
            
-        int escolha = Integer.parseInt(s.nextLine());
+        int escolha = s.nextInt();
 
         switch (escolha) {
             case 1:
                 System.out.println("Digite o número da mesa da comanda:");
-                int numero = Integer.parseInt(s.nextLine());
+                int numero = s.nextInt();
 
                 ComandaDAO.criaComanda(numero);
                 return;
             case 2:
-                System.out.println("Digite o id da comanda a ser removida:");
-                int id = Integer.parseInt(s.nextLine());
-
-                ComandaDAO.deletaComandaPorID(id);
+                System.out.println("Escolha a comanda à se fazer checkout:");
+                int id = s.nextInt();
+                ComandaDAO.alteraComanda("status_pgto", id, "PAGA");
                 return;
             case 3:
-                List<Comanda> c = ComandaDAO.selectAll();
-                for(Comanda com: c){
-                    System.out.println(com);
-                }
+                System.out.println("Escolha uma comanda para remover: ");
+                int idd = escolheComanda(s);
+                ComandaDAO.deletaComandaPorID(idd);
                 return;
             case 4:
-                System.out.println("Digite o id da comanda a ser mostrada:");
-                int idd = Integer.parseInt(s.nextLine());          
-                Comanda com = ComandaDAO.procuraComandaPorID(idd);
-
-                System.out.println(com);
+                mostraTodasComandasAbertas();
                 return;
             case 5:
+                mostraTodasComandasPagas();
+                return;
+            case 6:
+                System.out.println("Insira o ID da comanda a ser mostrada: ");
+                int iddd = s.nextInt();
+                ComandaDAO.procuraComandaPorID(iddd);
+                return;
+            case 7:
                 return;
             default:
                 System.out.println("Entrada inválida!");
@@ -279,8 +327,6 @@ public class Main {
            }
     }
 
-    /* AUXILIARES + FUNÇÕES SOBRE FUNCIONÁRIOS */
-    /* AUXILIARES + FUNÇÕES SOBRE COMANDAS */
     /* AUXILIARES + FUNÇÕES SOBRE PEDIDOS */
     public static void mostraTodosPedidosPendentes(){
         List<Pedido> list = PedidoDAO.selectAll("PENDENTE");
@@ -289,8 +335,80 @@ public class Main {
         }
         System.out.println();
     }
-    public static void mostraTodosPedidosConcluidos(){}
+    public static void mostraTodosPedidosConcluidos(){
+        List<Pedido> list = PedidoDAO.selectAll("ATENDIDO");
+        for(Pedido p : list){
+            System.out.println(p);
+        }
+        System.out.println();
+    }
+    public static int escolhePedido(Scanner s){
+        System.out.println("Escolha um pedido: ");
+        mostraTodosPedidosPendentes();
+        System.out.print("Sua escolha: ");
+        return s.nextInt();
+    }
+    public static int escolhePedidoPendente(Scanner s){
+        System.out.println("Escolha um pedido: ");
+        mostraTodosPedidosPendentes();
+        System.out.print("Sua escolha: ");
+        return s.nextInt();
+    }
+    public static void menuEscolhaPedido(Scanner s){
+        System.out.println("1. Fazer um pedido");
+        System.out.println("2. Atender um pedido");
+        System.out.println("3. Cancelar um pedido");
+        System.out.println("4. Deletar um pedido");
+        System.out.println("5. Mostrar todos os pedidos pendentes");
+        System.out.println("6. Mostrar todos os pedidos concluídos");
+        System.out.println("7. Alterar itens de um pedido");
+        System.out.println("8. Voltar");
 
+        int escolha = s.nextInt();
+
+        switch (escolha) {
+            case 1:
+                System.out.println("Qual comanda fez o pedido?");
+                int idComanda = escolheComandaAberta(s);
+                int novoPedidoID = PedidoDAO.criaPedido(idComanda);
+                int escolhaPedido = 1;
+                while(escolhaPedido == 1){
+                    System.out.println("Insira o produto pedido: ");
+                    // FAZER A LÓGICA
+                    System.out.println("Quer adicionar outro produto no pedido?");
+                }
+                break;
+            case 2:
+                System.out.println("Escolha o pedido à ser concluído: ");
+                int id = escolhePedidoPendente(s);
+                PedidoDAO.alteraPedido("status_pedido", id, "ATENDIDO");
+                break;
+                case 3:
+                System.out.println("Escolha o pedido à ser cancelado: ");
+                int idd = escolhePedidoPendente(s);
+                PedidoDAO.alteraPedido("status_pedido", idd, "CANCELADO");
+                break;
+            case 4:
+                System.out.println("Escolha o pedido à ser deletado: ");
+                int iddd = escolhePedido(s);
+                PedidoDAO.deletaPedidoPorID(iddd);
+                break;
+            case 5:
+                mostraTodosPedidosPendentes();
+                break;
+                case 6:
+                mostraTodosPedidosConcluidos();
+                break;
+            case 7:
+                System.out.println("Falta fazer essa bomba...");
+                break;
+        
+            default:
+                System.out.println("Escolha inválida.");
+                break;
+        }
+
+    }
 
     public static int menu(Scanner s){
         System.out.println(".o°o.o°o.o° CAFETERIA °o.o°o.o°o.");
@@ -314,7 +432,7 @@ public class Main {
                 return 0;
             case 3:
                 System.out.println("Escolhas Funcionários");
-                EscolhaFuncionario(s);
+                menuEscolhaFuncionario(s);
                 return 0;
             case 4:
                 System.out.println("Escolhas com Comanda");
