@@ -14,7 +14,7 @@ public class ConexaoDB {
         try {
             if (conexao == null || conexao.isClosed()) {
                 conexao = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5433/cafeteria?charSet=UTF-8",
+                    "jdbc:postgresql://localhost:5433/cafeteria?characterEncoding=UTF-8",
                     "postgres", "1234"
                 );
             }
