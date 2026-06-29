@@ -2,7 +2,13 @@ package com.cafeteria.SQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cafeteria.dados.Funcionario;
+import com.cafeteria.dados.Ingrediente;
 
 public class InfoProdutoDAO {
 
@@ -23,5 +29,25 @@ public class InfoProdutoDAO {
             System.out.println("Erro ao criar relação: " + e.getMessage());
             return false;
         }
+    }
+
+    public static List<Ingrediente> buscaIngredientesDeUmProduto(int IDproduto){
+            List<Ingrediente> ingredientes = new ArrayList<>();
+            String sql = "SELECT * FROM Info_produto WHERE FK_produto = ?";
+
+            try{
+                Connection con = ConexaoDB.getInstancia();
+                PreparedStatement st = con.prepareStatement(sql);
+                st.setInt(1, IDproduto);
+                ResultSet rs = st.executeQuery();
+                while(rs.next()){
+                    Ingrediente i = IngredienteDAO.procuraIngredientePorID(rs.getInt("FK_ingrediente"));
+                    ingredientes.add(i);
+                }
+                return ingredientes;
+            }catch(SQLException e){
+                System.out.println(e.getMessage());
+                return null;
+            }
     }
 }

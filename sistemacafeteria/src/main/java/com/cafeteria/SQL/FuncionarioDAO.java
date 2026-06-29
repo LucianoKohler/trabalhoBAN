@@ -105,7 +105,7 @@ public class FuncionarioDAO {
         }
 
     public static Boolean deletaFuncionarioPorID(int fID){
-        String sql = "DELETE FROM Funcionarios WHERE ID_funcionario = ?";
+        String sql = "DELETE FROM Funcionario WHERE ID_funcionario = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);

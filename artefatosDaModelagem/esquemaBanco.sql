@@ -48,7 +48,7 @@ CREATE TABLE Comanda(
 	ID_comanda SERIAL PRIMARY KEY,
 	numero_mesa int,
 	data_hora_abertura timestamp default CURRENT_TIMESTAMP,
-	status_pgto varchar(20),
+	status_pgto varchar(20) DEFAULT 'ABERTA',
     CONSTRAINT check_status_pgto CHECK (status_pgto IN ('ABERTA', 'PAGA'))
 );
 

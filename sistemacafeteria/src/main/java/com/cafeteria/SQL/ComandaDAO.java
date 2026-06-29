@@ -13,12 +13,11 @@ public class ComandaDAO {
 
     // Só precisa da mesa pois o resto é gerado na hora (data abertura, status)
     public static Boolean criaComanda(int numero_mesa){
-        String sql = "INSERT INTO Comanda (numero_mesa, status_pgto) VALUES (?, ?)";
+        String sql = "INSERT INTO Comanda (numero_mesa) VALUES (?)";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
             st.setInt(1, numero_mesa);
-            st.setString(2, "PENDENTE");
             st.executeUpdate();
             st.close();
             System.out.println("Comanda criada com sucesso!");
@@ -106,7 +105,7 @@ public class ComandaDAO {
     }
 
     public static Boolean alteraComanda(String campoAlterado, int comandaID, String novoAtributo){
-        String sql = "UPDATE Produto SET " + campoAlterado + " = ? WHERE ID_produto = ?";
+        String sql = "UPDATE Comanda SET " + campoAlterado + " = ? WHERE ID_comanda = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
