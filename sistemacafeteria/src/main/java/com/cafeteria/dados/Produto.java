@@ -49,7 +49,7 @@ public class Produto {
 
     public String toString(){
         StringBuffer s = new StringBuffer();
-        s.append("ID: " + id + " Nome: " + nome + " Preço: R$" + preco + " Categoria " + categoria);
+        s.append("ID: " + id + " Nome: " + nome + " Preço: R$" + String.format("%.2f", preco) + " Categoria: " + categoria);
         
         return s.toString();
     }

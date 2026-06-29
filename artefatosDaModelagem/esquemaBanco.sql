@@ -25,7 +25,7 @@ CREATE TABLE Funcionario(
 	salario float,
 	data_contratacao date,
 	cargo varchar(20),
-    CONSTRAINT check_cargo CHECK (cargo IN ('BARISTA', 'GERENTE', 'FAXINEIRO'))
+    CONSTRAINT check_cargo CHECK (cargo IN ('barista', 'gerente', 'faxineiro'))
 );
 
 CREATE TABLE Ingrediente(
@@ -41,27 +41,27 @@ CREATE TABLE Produto(
 	nome varchar(40),
 	preco float,
 	categoria varchar(20),
-    CONSTRAINT check_categoria CHECK (categoria IN ('BEBIDA_QUENTE', 'BEBIDA_FRIA', 'SALGADO', 'DOCE', 'BOLO', 'OUTROS'))
+    CONSTRAINT check_categoria CHECK (categoria IN ('bebida quente', 'bebida fria', 'salgado', 'doce', 'bolo', 'outros'))
 );
 
 CREATE TABLE Comanda(
 	ID_comanda SERIAL PRIMARY KEY,  
 	numero_mesa int,
 	data_hora_abertura timestamp default CURRENT_TIMESTAMP,
-	status_pgto varchar(20) DEFAULT 'ABERTA',
-    CONSTRAINT check_status_pgto CHECK (status_pgto IN ('ABERTA', 'PAGA'))
+	status_pgto varchar(20) DEFAULT 'aberta',
+    CONSTRAINT check_status_pgto CHECK (status_pgto IN ('aberta', 'paga'))
 );
 
 CREATE TABLE Pedido(
 	ID_pedido SERIAL PRIMARY KEY,
     data_hora_abertura timestamp DEFAULT CURRENT_TIMESTAMP,
-    status_pedido varchar(20) DEFAULT 'PENDENTE',
+    status_pedido varchar(20) DEFAULT 'pendente',
 	FK_comanda int,
 	FK_funcionario int,
 
     CONSTRAINT fk_pedido_comanda FOREIGN KEY (FK_comanda) REFERENCES Comanda(ID_comanda) ON DELETE CASCADE,
     CONSTRAINT fk_pedido_funcionario FOREIGN KEY (FK_funcionario) REFERENCES Funcionario(ID_funcionario) ON DELETE SET NULL,
-    CONSTRAINT check_status CHECK (status_pedido IN ('PENDENTE', 'EM_PREPARO', 'ATENDIDO', 'CANCELADO'))
+    CONSTRAINT check_status CHECK (status_pedido IN ('pendente', 'atendido', 'cancelado'))
 );
 
 CREATE TABLE Info_produto(

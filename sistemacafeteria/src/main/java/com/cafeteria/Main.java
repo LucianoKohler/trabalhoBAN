@@ -2,7 +2,6 @@ package com.cafeteria;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -268,14 +267,14 @@ public class Main {
 
     /* AUXILIARES + FUNÇÕES SOBRE COMANDAS */
     public static void mostraTodasComandasAbertas(){
-        List<Comanda> list = ComandaDAO.selectAll("ABERTA");
+        List<Comanda> list = ComandaDAO.selectAll("aberta");
         for(Comanda c : list){
             System.out.println(c);
         }
         System.out.println();
     }
     public static void mostraTodasComandasPagas(){
-        List<Comanda> list = ComandaDAO.selectAll("PAGA");
+        List<Comanda> list = ComandaDAO.selectAll("paga");
         for(Comanda c : list){
             System.out.println(c);
         }
@@ -299,7 +298,7 @@ public class Main {
         mostraTodasComandasAbertas();
         System.out.print("Sua escolha: ");
         Comanda c = ComandaDAO.procuraComandaPorID(leInt(s));
-        if(c.getStatus_pgto().equals("ABERTA")){
+        if(c.getStatus_pgto().equals("aberta")){
             return c;
         }
         return null;
@@ -330,7 +329,7 @@ public class Main {
                 }else{
                     double total = ComandaDAO.calcularTotal(c.getId());
                     System.out.println("Total: R$ " + total);
-                    ComandaDAO.alteraComanda("status_pgto", c.getId(), "PAGA");
+                    ComandaDAO.alteraComanda("status_pgto", c.getId(), "paga");
                     System.out.println("Checkout concluído!");
                 }
                 return;
@@ -366,14 +365,14 @@ public class Main {
 
     /* AUXILIARES + FUNÇÕES SOBRE PEDIDOS */
     public static void mostraTodosPedidosPendentes(){
-        List<Pedido> list = PedidoDAO.selectAll("PENDENTE");
+        List<Pedido> list = PedidoDAO.selectAll("pendente");
         for(Pedido p : list){
             System.out.println(p);
         }
         System.out.println();
     }
     public static void mostraTodosPedidosConcluidos(){
-        List<Pedido> list = PedidoDAO.selectAll("ATENDIDO");
+        List<Pedido> list = PedidoDAO.selectAll("atendido");
         for(Pedido p : list){
             System.out.println(p);
         }
@@ -434,7 +433,7 @@ public class Main {
             case 2:
                 System.out.println("Escolha o pedido à ser concluído: ");
                 Pedido p = escolhePedidoPendente(s);
-                if(p == null || p.getStatus_pedido() == "ATENDIDO"){
+                if(p == null || p.getStatus_pedido() == "atendido"){
                     System.out.println("Pedido inválido");
                     return;
                 }
@@ -445,16 +444,16 @@ public class Main {
                     return;
                 }
                     PedidoDAO.alteraPedido("FK_funcionario", p.getId(), String.valueOf(f.getId()));
-                    PedidoDAO.alteraPedido("status_pedido", p.getId(), "ATENDIDO");
+                    PedidoDAO.alteraPedido("status_pedido", p.getId(), "atendido");
                 
                     break;
                 case 3:
                 System.out.println("Escolha o pedido à ser cancelado: ");
                 Pedido p1 = escolhePedidoPendente(s);
-                if(p1 == null || p1.getStatus_pedido() == "ATENDIDO"){
+                if(p1 == null || p1.getStatus_pedido() == "atendido"){
                     System.out.println("Pedido inválido");
                 }else{
-                    PedidoDAO.alteraPedido("status_pedido", p1.getId(), "CANCELADO");
+                    PedidoDAO.alteraPedido("status_pedido", p1.getId(), "cancelado");
                 }
                 break;
             case 4:
@@ -475,7 +474,7 @@ public class Main {
             case 7:
                 System.out.println("Escolha um pedido para alterar a lista: ");
                 Pedido p3 = escolhePedidoPendente(s);
-                if(p3 == null || p3.getStatus_pedido() == "ATENDIDO"){
+                if(p3 == null || p3.getStatus_pedido() == "atendido"){
                     System.out.println("Pedido inválido");
                 }else{
                     System.out.println("O que você quer alterar do pedido? ");
