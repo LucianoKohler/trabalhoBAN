@@ -1,15 +1,22 @@
 package com.cafeteria;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 import com.cafeteria.SQL.InfoProdutoDAO;
+import com.cafeteria.SQL.ComandaDAO;
+import com.cafeteria.SQL.FuncionarioDAO;
 import com.cafeteria.SQL.IngredienteDAO;
 import com.cafeteria.SQL.PedidoDAO;
 import com.cafeteria.SQL.ProdutoDAO;
+import com.cafeteria.dados.Comanda;
+import com.cafeteria.dados.Funcionario;
 import com.cafeteria.dados.Ingrediente;
 import com.cafeteria.dados.Pedido;
 import com.cafeteria.dados.Produto;
+
 
 public class Main {
     public static void main(String args[]){
@@ -23,7 +30,6 @@ public class Main {
         }
 
         s.close();
-
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE INGREDIENTES */
@@ -91,7 +97,7 @@ public class Main {
                 System.out.println("Entrada inválida!");
                 return;
 
-           }
+        }
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE PRODUTOS */
@@ -168,6 +174,108 @@ public class Main {
                 System.out.println("Entrada inválida!");
                 return;
 
+        }
+    }
+
+    public static void EscolhaFuncionario(Scanner s){
+        System.out.println("1. Adicionar funcionário");
+        System.out.println("2. Remover funcionário");
+        System.out.println("3. Mostrar todos os funcionários");
+        System.out.println("4. Mostrar um funcionário");
+        System.out.println("5. Voltar");
+           
+        int escolha = Integer.parseInt(s.nextLine());
+
+        switch (escolha) {
+            case 1:
+                Funcionario novoFunc = new Funcionario();
+                System.out.println("Digite o nome do funcionário:");
+                String nome = s.nextLine();
+                novoFunc.setNome(nome);
+                System.out.println("Digite o salário do funcionário:");
+                float salario = Float.parseFloat(s.nextLine());
+                novoFunc.setSalario(salario);
+                System.out.println("Digite a data de contratação do funcionário:");
+                String entrada = s.nextLine();
+                DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate data = LocalDate.parse(entrada, fmt);
+                novoFunc.setData_contratacao(data);
+                System.out.println("Digite o cargo do funcionário:");
+                String cargo = s.nextLine();
+                novoFunc.setCargo(cargo);
+
+                FuncionarioDAO.insereFuncionario(novoFunc);
+
+                return;
+            case 2:
+                System.out.println("Digite o id do funcionário a ser removido:");
+                int id = Integer.parseInt(s.nextLine());
+
+                FuncionarioDAO.deletaFuncionarioPorID(id);
+                return;
+            case 3:
+                List<Funcionario> f = FuncionarioDAO.selectAll();
+                for(Funcionario func : f){
+                    System.out.println(func);
+                }
+                return;
+            case 4:
+                System.out.println("Digite o id do funcionário a ser mostrado:");
+                int idd = Integer.parseInt(s.nextLine());
+                Funcionario func = FuncionarioDAO.procuraFuncionarioPorID(idd);
+
+                System.out.println(func);
+                return;
+            case 5:
+                return;
+            default:
+                System.out.println("Entrada inválida!");
+                return;
+
+           }
+    }
+
+    public static void EscolhaComanda(Scanner s){
+        System.out.println("1. Adicionar comanda");
+        System.out.println("2. Remover comanda");
+        System.out.println("3. Mostrar todos as comandas");
+        System.out.println("4. Mostrar uma comanda");
+        System.out.println("5. Voltar");
+           
+        int escolha = Integer.parseInt(s.nextLine());
+
+        switch (escolha) {
+            case 1:
+                System.out.println("Digite o número da mesa da comanda:");
+                int numero = Integer.parseInt(s.nextLine());
+
+                ComandaDAO.criaComanda(numero);
+                return;
+            case 2:
+                System.out.println("Digite o id da comanda a ser removida:");
+                int id = Integer.parseInt(s.nextLine());
+
+                ComandaDAO.deletaComandaPorID(id);
+                return;
+            case 3:
+                List<Comanda> c = ComandaDAO.selectAll();
+                for(Comanda com: c){
+                    System.out.println(com);
+                }
+                return;
+            case 4:
+                System.out.println("Digite o id da comanda a ser mostrada:");
+                int idd = Integer.parseInt(s.nextLine());          
+                Comanda com = ComandaDAO.procuraComandaPorID(idd);
+
+                System.out.println(com);
+                return;
+            case 5:
+                return;
+            default:
+                System.out.println("Entrada inválida!");
+                return;
+
            }
     }
 
@@ -206,6 +314,7 @@ public class Main {
                 return 0;
             case 3:
                 System.out.println("Escolhas Funcionários");
+                EscolhaFuncionario(s);
                 return 0;
             case 4:
                 System.out.println("Escolhas com Comanda");

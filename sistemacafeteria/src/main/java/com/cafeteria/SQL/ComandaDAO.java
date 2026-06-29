@@ -54,7 +54,7 @@ public class ComandaDAO {
 
     public static List<Comanda> selectAll(){
         List<Comanda> comandas = new ArrayList<>();
-        String sql = "SELECT * FROM Comandas";
+        String sql = "SELECT * FROM Comanda";
 
         try{
             Connection con = ConexaoDB.getInstancia();
