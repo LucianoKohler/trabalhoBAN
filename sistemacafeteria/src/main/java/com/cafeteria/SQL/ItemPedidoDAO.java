@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.sql.Statement;
 import java.util.List;
 
-import com.cafeteria.dados.Ingrediente;
 import com.cafeteria.dados.ItemPedido;
 import com.cafeteria.dados.Produto;
 

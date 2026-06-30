@@ -128,44 +128,80 @@ INSERT INTO info_produto (FK_ingrediente, FK_produto, quantidade, observacao) VA
 -----------------------------------------
 --              COMANDAS               --
 -----------------------------------------
-
 INSERT INTO Comanda (numero_mesa, data_hora_abertura, status_pgto) VALUES
-(4, '2026-06-29 09:15:00', 'paga'),   
-(12, '2026-06-29 10:30:00', 'paga'),  
-(7, CURRENT_TIMESTAMP, 'aberta');
+(4, '2026-05-29 09:15:00', 'paga'),   
+(12, '2026-05-29 10:30:00', 'paga'),  
+(2, '2026-06-05 08:30:00', 'paga'),   
+(5, '2026-06-08 14:20:00', 'paga'),   
+(8, '2026-06-12 16:15:00', 'paga'),   
+(3, '2026-06-15 09:10:00', 'paga'),   
+(1, '2026-06-18 10:45:00', 'paga'),   
+(4, '2026-06-20 18:00:00', 'paga'),   
+(10, '2026-06-30 14:00:00', 'aberta'), 
+(7, CURRENT_TIMESTAMP, 'aberta');      
 
 -----------------------------------------
 --              PEDIDOS                --
 -----------------------------------------
-
 INSERT INTO Pedido (FK_comanda, FK_funcionario, data_hora_abertura, status_pedido, observacao) VALUES
--- Comanda 1 (Mesa 4)
+
 (1, 1, '2026-06-29 09:20:00', 'atendido', 'cappucinos com bastante espuma'),
 (1, 2, '2026-06-29 09:45:00', 'atendido', 'água com gelo e limão'),
-
--- Comanda 2 (Mesa 12)
-(2, 3, '2026-06-29 10:35:00', 'atendido', NULL),  
-
--- Comanda 3 (Mesa 7 - ABERTA)
-(3, NULL, CURRENT_TIMESTAMP, 'pendente', 'sanduiche sem tomate');                     
+(2, 3, '2026-06-29 10:35:00', 'atendido', NULL),
+(3, 1, '2026-06-05 08:35:00', 'atendido', 'Leite bem quente'),
+(3, 1, '2026-06-05 08:50:00', 'atendido', NULL),
+(4, 2, '2026-06-08 14:25:00', 'atendido', 'Para viagem'),
+(5, 3, '2026-06-12 16:20:00', 'atendido', NULL),
+(5, 3, '2026-06-12 16:40:00', 'atendido', 'Fatias grandes'),
+(6, 1, '2026-06-15 09:15:00', 'cancelado', NULL),
+(6, 2, '2026-06-15 09:25:00', 'atendido', NULL),
+(7, 1, '2026-06-18 10:50:00', 'atendido', NULL),
+(8, 2, '2026-06-20 18:05:00', 'atendido', 'Sem canudo'),
+(8, 2, '2026-06-20 18:30:00', 'atendido', NULL),
+(9, 3, '2026-06-22 13:35:00', 'atendido', 'Copos com gelo'),
+(10, NULL, CURRENT_TIMESTAMP, 'pendente', 'sanduiche sem tomate');
 
 -----------------------------------------
 --         ITENS DO PEDIDO             --
 -----------------------------------------
-
 INSERT INTO Item_pedido (FK_pedido, FK_produto, quantidade, preco_unitario) VALUES
 
--- Pedido 1 (Mesa 4)
+-- Pedido 1 
 (1, 3, 2, 10.00),        -- 2x Capuccino
 (1, 5, 1, 15.40),        -- 1x Red Velvet
-
--- Pedido 2 (Mesa 4)
+-- Pedido 2 
 (2, 12, 1, 5.50),        -- 1x Água com gás
-
--- Pedido 3 (Mesa 12)
+-- Pedido 3 
 (3, 10, 1, 14.50),       -- 1x Sanduíche Italiano
 (3, 9, 1, 15.00),        -- 1x Soda Italiana
-
--- Pedido 4 (Mesa 7)
+-- Pedido 4 
 (4, 10, 2, 14.50),       -- 1x Sanduíche Italiano
-(4, 11, 1, 4.50);        -- 1x Água
+(4, 11, 1, 4.50),        -- 1x Água
+-- Pedido 5
+(5, 3, 2, 10.00),        -- 2x Capuccino
+(5, 6, 1, 13.40),        -- 1x Bolo de cenoura
+-- Pedido 6
+(6, 11, 1, 4.50),        -- 1x Água
+-- Pedido 7
+(7, 8, 1, 16.00),        -- 1x Icemaltine
+(7, 7, 1, 15.40),        -- 1x Torta alemã
+-- Pedido 8
+(8, 1, 2, 6.50),         -- 2x Café filtrado
+(8, 10, 2, 14.50),       -- 2x Sanduíche Italiano
+-- Pedido 9
+(9, 5, 2, 15.40),        -- 2x Bolo Red Velvet
+-- Pedido 10 
+(10, 4, 1, 12.00),       -- 1x Chocolate quente
+-- Pedido 11
+(11, 4, 1, 12.00),       -- 1x Chocolate quente
+(11, 5, 1, 15.40),       -- 1x Bolo Red Velvet
+-- Pedido 12
+(12, 2, 3, 7.50),        -- 3x Café filtrado com Leite
+-- Pedido 13
+(13, 9, 1, 15.00),       -- 1x Soda Italiana
+(13, 10, 1, 14.50),      -- 1x Sanduíche Italiano
+-- Pedido 14
+(14, 3, 1, 10.00),       -- 1x Capuccino
+-- Pedido 15
+(15, 1, 2, 6.50),        -- 2x Café filtrado
+(15, 6, 1, 13.40);       -- 1x Bolo de cenoura
