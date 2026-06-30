@@ -49,7 +49,7 @@ public class PedidoDAO {
                 return new Pedido(
                     res.getInt("ID_pedido"),
                     res.getTimestamp("data_hora_abertura").toLocalDateTime(), 
-                    "PENDENTE", 
+                    "pendente", 
                     res.getInt("FK_funcionario"), 
                     res.getInt("FK_comanda"));
             }else{
@@ -74,7 +74,7 @@ public class PedidoDAO {
                 Pedido p = new Pedido(
                     res.getInt("ID_pedido"),
                     res.getTimestamp("data_hora_abertura").toLocalDateTime(), 
-                    "PENDENTE", 
+                    "pendente", 
                     res.getInt("FK_funcionario"), 
                     res.getInt("FK_comanda"));
                 pedidos.add(p);

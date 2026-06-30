@@ -73,7 +73,7 @@ public class ItemPedidoDAO {
     
     public static List<ItemPedido> selectAll(int fkPedido){
         List<ItemPedido> itensDoPedido = new ArrayList<>();
-        String sql = "SELECT * FROM ItemPedido WHERE FK_Pedido = ?";
+        String sql = "SELECT * FROM Item_pedido WHERE FK_Pedido = ?";
 
         try{
             Connection con = ConexaoDB.getInstancia();
@@ -98,7 +98,7 @@ public class ItemPedidoDAO {
     }
 
     public static Boolean deletaItemPedidoPorID(int id){
-        String sql = "DELETE FROM ItemPedido WHERE ID_item_pedido = ?";
+        String sql = "DELETE FROM item_pedido WHERE ID_item_pedido = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
@@ -120,7 +120,7 @@ public class ItemPedidoDAO {
     }
 
     public static Boolean alteraItemPedido(String campoAlterado, int pedidoID, String novoAtributo){
-        String sql = "UPDATE ItemPedido SET " + campoAlterado + " = ? WHERE ID_item_pedido = ?";
+        String sql = "UPDATE item_pedido SET " + campoAlterado + " = ? WHERE ID_item_pedido = ?";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
