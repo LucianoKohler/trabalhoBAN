@@ -1,9 +1,7 @@
 package com.cafeteria;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -19,6 +17,7 @@ import com.cafeteria.SQL.ProdutoDAO;
 import com.cafeteria.dados.Comanda;
 import com.cafeteria.dados.Funcionario;
 import com.cafeteria.dados.Ingrediente;
+import com.cafeteria.dados.ItemRelatorio;
 import com.cafeteria.dados.Pedido;
 import com.cafeteria.dados.Produto;
 
@@ -145,8 +144,7 @@ public class Main {
                 return 0;
             }
             for(Ingrediente i : ings){
-                DecimalFormat df = new DecimalFormat("#,##");
-                System.out.println("\t- ID: " + i.getId() + "; " + df.format(i.getQuantidade()) + i.getUnidade_medida() + " de " + i.getNome());
+                System.out.println("\t- ID: " + i.getId() + "; " + i.getQuantidade() + i.getUnidade_medida() + " de " + i.getNome());
 
                 if(i.getDescricao() != null && !i.getDescricao().trim().isEmpty()){
                     System.out.println("\t\tObs:" + i.getDescricao());
@@ -727,6 +725,17 @@ public class Main {
             if(qtd == 0) break;
         }      
     }
+    public static void mostraMediaProdutos(){
+        List<Map.Entry<String, Float>>medias = AdministrativoDAO.mostraMediaDePrecoDosProdutos();
+        for(Map.Entry<String, Float> media : medias){
+            System.out.println("Categoria: " + media.getKey() + ": Média: R$ " + media.getValue());
+        }
+    }
+    public static void mostraBaristaDoMes(){
+        ItemRelatorio barista = AdministrativoDAO.mostraBaristaDoMes();
+        System.out.println("Parabéns ao " + barista.getNome() + " por atender um total de " +
+        barista.getQuantidade() + " pedidos e gerar incríveis R$" + barista.getValor() + " de faturamento nesse mês!!!");
+    }
     public static void menuEscolhaAdministrativa(Scanner s){
         System.out.println("1. Mostrar os produtos mais vendidos");
         System.out.println("2. Mostrar a média de preço dos produtos");
@@ -741,15 +750,12 @@ public class Main {
                 mostraProdutosMaisVendidos(s, qtdProdutos);
                 break;
             case 2:
-                System.out.println("Não tem nada aqui ainda ;)");
+                mostraMediaProdutos();
                 break;
             case 3:
-                System.out.println("Não tem nada aqui ainda ;)");
+                mostraBaristaDoMes();
                 break;
             case 4:
-                System.out.println("Não tem nada aqui ainda ;)");
-                break;
-            case 5:
                 break;
         
             default:
