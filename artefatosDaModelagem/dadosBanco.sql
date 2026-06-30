@@ -138,34 +138,34 @@ INSERT INTO Comanda (numero_mesa, data_hora_abertura, status_pgto) VALUES
 --              PEDIDOS                --
 -----------------------------------------
 
-INSERT INTO Pedido (FK_comanda, FK_funcionario, data_hora_abertura, status_pedido) VALUES
+INSERT INTO Pedido (FK_comanda, FK_funcionario, data_hora_abertura, status_pedido, observacao) VALUES
 -- Comanda 1 (Mesa 4)
-(1, 1, '2026-06-29 09:20:00', 'atendido'),
-(1, 2, '2026-06-29 09:45:00', 'atendido'),
+(1, 1, '2026-06-29 09:20:00', 'atendido', 'cappucinos com bastante espuma'),
+(1, 2, '2026-06-29 09:45:00', 'atendido', 'água com gelo e limão'),
 
 -- Comanda 2 (Mesa 12)
-(2, 3, '2026-06-29 10:35:00', 'atendido'),  
+(2, 3, '2026-06-29 10:35:00', 'atendido', NULL),  
 
 -- Comanda 3 (Mesa 7 - ABERTA)
-(3, NULL, CURRENT_TIMESTAMP, 'pendente');                     
+(3, NULL, CURRENT_TIMESTAMP, 'pendente', 'sanduiche sem tomate');                     
 
 -----------------------------------------
 --         ITENS DO PEDIDO             --
 -----------------------------------------
 
-INSERT INTO Item_pedido (FK_pedido, FK_produto, quantidade, preco_unitario, observacao) VALUES
+INSERT INTO Item_pedido (FK_pedido, FK_produto, quantidade, preco_unitario) VALUES
 
 -- Pedido 1 (Mesa 4)
-(1, 3, 2, 10.00, 'Com bastante espuma'),  -- 2x Capuccino
-(1, 5, 1, 15.40, NULL),                   -- 1x Red Velvet
+(1, 3, 2, 10.00),        -- 2x Capuccino
+(1, 5, 1, 15.40),        -- 1x Red Velvet
 
 -- Pedido 2 (Mesa 4)
-(2, 12, 1, 5.50, 'Gelo e limão'),         -- 1x Água com gás
+(2, 12, 1, 5.50),        -- 1x Água com gás
 
 -- Pedido 3 (Mesa 12)
-(3, 10, 1, 14.50, 'Sem tomate'),          -- 1x Sanduíche Italiano
-(3, 9, 1, 15.00, 'Sabor maçã verde'),     -- 1x Soda Italiana
+(3, 10, 1, 14.50),       -- 1x Sanduíche Italiano
+(3, 9, 1, 15.00),        -- 1x Soda Italiana
 
 -- Pedido 4 (Mesa 7)
-(4, 10, 2, 14.50, NULL),                  -- 1x Sanduíche Italiano
-(4, 11, 1, 4.50, 'Natural');              -- 1x Água
+(4, 10, 2, 14.50),       -- 1x Sanduíche Italiano
+(4, 11, 1, 4.50);        -- 1x Água

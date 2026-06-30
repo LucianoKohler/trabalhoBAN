@@ -6,18 +6,24 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 
 import com.cafeteria.dados.Pedido;
 
 public class PedidoDAO {
 
-    public static int criaPedido(int fkComanda){
-        String sql = "INSERT INTO Pedido (FK_comanda) VALUES (?)";
+    public static int criaPedido(int fkComanda, String obs){
+        String sql = "INSERT INTO Pedido (FK_comanda, observacao) VALUES (?, ?)";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, fkComanda);
+            if(obs.length() == 0){
+                st.setNull(2, Types.VARCHAR);
+            }else{
+                st.setString(2, obs);
+            }   
             st.executeUpdate();
 
             try (ResultSet rs = st.getGeneratedKeys()) {
@@ -50,6 +56,7 @@ public class PedidoDAO {
                     res.getInt("ID_pedido"),
                     res.getTimestamp("data_hora_abertura").toLocalDateTime(), 
                     "pendente", 
+                    res.getString("observacao"),
                     res.getInt("FK_funcionario"), 
                     res.getInt("FK_comanda"));
             }else{
@@ -63,18 +70,24 @@ public class PedidoDAO {
     
     public static List<Pedido> selectAll(String status){
         List<Pedido> pedidos = new ArrayList<>();
-        String sql = "SELECT * FROM Pedido WHERE status_pedido = ?";
+        String sql;
+        if(status.length() == 0){
+            sql =  "SELECT * FROM Pedido";
+        }else{
+            sql =  "SELECT * FROM Pedido WHERE status_pedido = ?";
+        }
 
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql);
-            st.setString(1, status);
+            if(status.length() > 0) st.setString(1, status);
             ResultSet res = st.executeQuery();
             while(res.next()){
                 Pedido p = new Pedido(
                     res.getInt("ID_pedido"),
                     res.getTimestamp("data_hora_abertura").toLocalDateTime(), 
-                    "pendente", 
+                    res.getString("status_pedido"), 
+                    res.getString("observacao"),
                     res.getInt("FK_funcionario"), 
                     res.getInt("FK_comanda"));
                 pedidos.add(p);
@@ -115,6 +128,7 @@ public class PedidoDAO {
             PreparedStatement st = con.prepareStatement(sql);
             switch (campoAlterado) {
                 case "status_pedido":
+                case "observacao":
                     st.setString(1, novoAtributo);
                     break;
             
@@ -130,7 +144,6 @@ public class PedidoDAO {
             st.setInt(2, pedidoID);
             st.executeUpdate();
             st.close();
-            System.out.println("Pedido alterado com sucesso!");
 
             return true;
         }catch(SQLException e){
