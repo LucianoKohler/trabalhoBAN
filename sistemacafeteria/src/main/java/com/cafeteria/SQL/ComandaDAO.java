@@ -136,7 +136,7 @@ public class ComandaDAO {
     }
 
     public static boolean possuiPedidosPendentes(int idComanda) {
-        String sql = "SELECT COUNT(*) AS total_pendente FROM Pedido WHERE FK_comanda = ? AND status_pedido NOT IN ('ATENDIDO', 'CANCELADO')";
+        String sql = "SELECT COUNT(*) AS total_pendente FROM Pedido WHERE FK_comanda = ? AND status_pedido NOT IN ('atendido', 'cancelado')";
 
         try (Connection con = ConexaoDB.getInstancia();
              PreparedStatement st = con.prepareStatement(sql)) {
@@ -158,7 +158,7 @@ public class ComandaDAO {
     public static double calcularTotal(int comandaID){
         String sql = "SELECT COALESCE(SUM(ip.quantidade * ip.preco_unitario), 0) " + 
         " AS total FROM Item_pedido ip JOIN Pedido p ON p.ID_pedido = ip.FK_pedido " + 
-        "WHERE p.FK_comanda = ? AND status_pedido = 'ATENDIDO';";
+        "WHERE p.FK_comanda = ? AND status_pedido = 'atendido';";
 
         try {
             Connection con = ConexaoDB.getInstancia();

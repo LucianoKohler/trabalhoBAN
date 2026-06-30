@@ -543,7 +543,7 @@ public class Main {
         return 1;
     }
     public static int mostraTodosPedidosConcluidos(){
-        System.out.println("MOSTRANDO TODOS OS PEIDDOS ATENDIDOS");
+        System.out.println("MOSTRANDO TODOS OS PEIDDOS S");
         List<Pedido> list = PedidoDAO.selectAll("atendido");
         if(list.isEmpty()){
             System.out.println("Não há registros para mostrar.");
