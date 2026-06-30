@@ -3,10 +3,13 @@ package com.cafeteria;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import com.cafeteria.SQL.InfoProdutoDAO;
+import com.cafeteria.SQL.AdministrativoDAO;
 import com.cafeteria.SQL.ComandaDAO;
 import com.cafeteria.SQL.FuncionarioDAO;
 import com.cafeteria.SQL.IngredienteDAO;
@@ -713,17 +716,29 @@ public class Main {
     }
 
     /* AUXILIARES + FUNÇÕES ADMINISTRATIVAS */
+    public static void mostraProdutosMaisVendidos(Scanner s, int qtd){
+        List<Map.Entry<String, Integer>> produtos = AdministrativoDAO.mostraProdutosMaisVendidos();
+        for (Map.Entry<String, Integer> par : produtos) {
+            String nome = par.getKey();    
+            Integer qtdVenda = par.getValue();  
+            
+            System.out.println("Item: " + nome + "; Vendas: " + qtdVenda);
+            qtd--;
+            if(qtd == 0) break;
+        }      
+    }
     public static void menuEscolhaAdministrativa(Scanner s){
         System.out.println("1. Mostrar os produtos mais vendidos");
         System.out.println("2. Mostrar a média de preço dos produtos");
         System.out.println("3. Mostrar o barista do mês");
-        System.out.println("4. Mostrar o gasto médio de uma mesa");
-        System.out.println("5. Voltar ");
+        System.out.println("4. Voltar ");
 
         int escolha = leInt(s);
         switch (escolha) {
             case 1:
-                System.out.println("Não tem nada aqui ainda ;)");
+                System.out.println("Quantos produtos devem ser mostrados?");
+                int qtdProdutos = leInt(s);
+                mostraProdutosMaisVendidos(s, qtdProdutos);
                 break;
             case 2:
                 System.out.println("Não tem nada aqui ainda ;)");
@@ -774,7 +789,7 @@ public class Main {
                 break;
             case 6:
                 menuEscolhaAdministrativa(s);
-                return 0;
+                break;
             case 7:
                 System.out.println("Até mais!");
                 return 0;
