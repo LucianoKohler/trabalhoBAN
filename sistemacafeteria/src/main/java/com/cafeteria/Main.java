@@ -14,7 +14,6 @@ import com.cafeteria.SQL.PedidoDAO;
 import com.cafeteria.SQL.ProdutoDAO;
 import com.cafeteria.dados.Comanda;
 import com.cafeteria.dados.Funcionario;
-import com.cafeteria.dados.InfoProduto;
 import com.cafeteria.dados.Ingrediente;
 import com.cafeteria.dados.Pedido;
 import com.cafeteria.dados.Produto;
@@ -101,7 +100,7 @@ public class Main {
                 System.out.println("Digite o id do ingrediente a ser mostrado:");
                 Ingrediente i = IngredienteDAO.procuraIngredientePorID(leInt(s));
                 if(i == null){
-                    System.out.println("Produto não encontrado");
+                    System.out.println("Ingrediente não encontrado");
                 }else{
                     System.out.println("Ingrediente encontrado: ");
                     System.out.println("\t" + i);
@@ -272,7 +271,6 @@ public class Main {
                 mostraTodosProdutos();
                 return;
             case 4:
-                System.out.println("Digite o id do produto a ser listado:");
                 Produto prod = escolheProduto(s);
                 if(prod == null){
                     System.out.println("Produto inválido");
@@ -473,6 +471,10 @@ public class Main {
                 if(c == null){
                     System.out.println("Comanda não encontrada");
                 }else{
+                    if(ComandaDAO.possuiPedidosPendentes(c.getId())){
+                        System.out.println("Impossível fechar a comanda pois ela ainda possui pedidos pendentes.");
+                        return;
+                    }
                     double total = ComandaDAO.calcularTotal(c.getId());
                     System.out.println("Total: R$ " + total);
                     ComandaDAO.alteraComanda("status_pgto", c.getId(), "paga");
