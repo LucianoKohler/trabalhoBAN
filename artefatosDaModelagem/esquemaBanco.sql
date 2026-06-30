@@ -67,7 +67,7 @@ CREATE TABLE Pedido(
 CREATE TABLE Info_produto(
 	ID_info_produto SERIAL PRIMARY KEY,
 	quantidade float,
-	observacao varchar(255),
+	observacao varchar(55),
 	FK_ingrediente int,
 	FK_produto int,
 

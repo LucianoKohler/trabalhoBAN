@@ -71,59 +71,59 @@ INSERT INTO Produto (nome, preco, categoria) VALUES
 INSERT INTO info_produto (FK_ingrediente, FK_produto, quantidade, observacao) VALUES
 
 -- Café filtrado
-(1, 1, 10, 'g de café'),
-(3, 1, 200, 'mL de água'),
+(1, 1, 10, NULL),
+(3, 1, 200, 'Água ideal entre 92ºC e 96ºC'),
 
 -- Café filtrado com leite
-(1, 2, 10, 'g de café'),
-(3, 2, 100, 'mL de água'),
-(2, 2, 100, 'mL de leite'),
+(1, 2, 10, NULL),
+(3, 2, 100, NULL),
+(2, 2, 100, 'Aquecer sem deixar ferver'),
 
 -- Capuccino
-(1, 3, 10, 'g de café'),
-(2, 3, 150, 'mL de leite'),
-(4, 3, 15, 'g de chocolate em pó'),
-(5, 3, 10, 'g de açúcar'),
+(1, 3, 10, NULL),
+(2, 3, 150, 'Vaporizar para criar microespuma'),
+(4, 3, 15, NULL),
+(5, 3, 10, NULL),
 
 -- Chocolate quente
-(2, 4, 200, 'mL de leite'),
-(4, 4, 20, 'g de chocolate em pó'),
-(5, 4, 10, 'g de açúcar'),
+(2, 4, 200, NULL),
+(4, 4, 20, NULL),
+(5, 4, 10, NULL),
 
 -- Bolo Red Velvet
-(6, 5, 250, 'g de farinha'),
-(7, 5, 3, 'ovos'),
-(8, 5, 100, 'g de manteiga'),
-(11, 5, 20, 'g de cacau'),
-(12, 5, 150, 'g de cream cheese'),
+(6, 5, 250, NULL),
+(7, 5, 3, 'Usar em temperatura ambiente'),
+(8, 5, 100, NULL),
+(11, 5, 20, NULL),
+(12, 5, 150, 'Bater bem gelado para a cobertura'),
 
 -- Bolo de cenoura
-(6, 6, 250, 'g de farinha'),
-(7, 6, 3, 'ovos'),
-(10, 6, 200, 'g de cenoura'),
-(4, 6, 40, 'g de chocolate em pó'),
+(6, 6, 250, NULL),
+(7, 6, 3, NULL),
+(10, 6, 200, NULL),
+(4, 6, 40, NULL),
 
 -- Torta alemã
-(15, 7, 200, 'g de bolacha'),
-(14, 7, 200, 'g de creme de leite'),
-(13, 7, 200, 'g de leite condensado'),
-(8, 7, 100, 'g de manteiga'),
+(15, 7, 200, NULL),
+(14, 7, 200, 'Usar lata gelada e sem o soro'),
+(13, 7, 200, NULL),
+(8, 7, 100, 'Ponto pomada (temperatura ambiente)'),
 
 -- Icemaltine
-(16, 8, 150, 'g de sorvete'),
-(4, 8, 30, 'g de achocolatado'),
-(2, 8, 150, 'mL de leite'),
+(16, 8, 150, NULL),
+(4, 8, 30, NULL),
+(2, 8, 150, NULL),
 
 -- Soda Italiana
-(17, 9, 300, 'mL de água com gás'),
-(18, 9, 50, 'mL de xarope'),
+(17, 9, 300, 'Completar copo com gelo antes da água'),
+(18, 9, 50, NULL),
 
 -- Sanduíche Italiano
-(19, 10, 1, 'unidade'),
-(20, 10, 50, 'g de presunto'),
-(21, 10, 50, 'g de queijo'),
-(22, 10, 30, 'g de tomate'),
-(23, 10, 20, 'g de alface');
+(19, 10, 1, 'Tostar levemente na chapa'),
+(20, 10, 50, NULL),
+(21, 10, 50, NULL),
+(22, 10, 30, NULL),
+(23, 10, 20, 'Secar bem para não amolecer o pão');
 
 -----------------------------------------
 --              COMANDAS               --
@@ -167,5 +167,5 @@ INSERT INTO Item_pedido (FK_pedido, FK_produto, quantidade, preco_unitario, obse
 (3, 9, 1, 15.00, 'Sabor maçã verde'),     -- 1x Soda Italiana
 
 -- Pedido 4 (Mesa 7)
-(4, 10, 2, 14.50, NULL);                  -- 1x Sanduíche Italiano
+(4, 10, 2, 14.50, NULL),                  -- 1x Sanduíche Italiano
 (4, 11, 1, 4.50, 'Natural');              -- 1x Água

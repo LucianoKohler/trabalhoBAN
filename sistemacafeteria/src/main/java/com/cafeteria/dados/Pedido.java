@@ -57,7 +57,7 @@ public class Pedido {
     public String toString(){
         StringBuffer s = new StringBuffer();
         s.append("ID: " + id + "\nFeito em: " + data_hora_pedido.toString() +
-        "\nAtendido por: " + atendente + 
+        "\n" + (atendente == 0 ? "Ainda não atendido" : "Atendido pelo funcionario " + atendente) + 
         "\nNúmero da comanda: " + comanda);
         
         return s.toString();
