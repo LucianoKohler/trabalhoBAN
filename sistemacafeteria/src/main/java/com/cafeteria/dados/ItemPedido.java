@@ -4,16 +4,14 @@ public class ItemPedido {
     private int id;
     private int quantidade;
     private float preco_unitario;
-    private String observacao;
     private int pedido;
     private int produto;
 
     /* Construtor */
-    public ItemPedido(int id, int quantidade, float preco_unitario, String observacao, int pedido, int produto) {
+    public ItemPedido(int id, int quantidade, float preco_unitario, int pedido, int produto) {
         this.id = id;
         this.quantidade = quantidade;
         this.preco_unitario = preco_unitario;
-        this.observacao = observacao;
         this.pedido = pedido;
         this.produto = produto;
     }
@@ -54,19 +52,11 @@ public class ItemPedido {
         this.preco_unitario = preco_unitario;
     }
 
-    public String getObservacao() {
-        return observacao;
-    }
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
-    }
-
-
     public String toString(){
         StringBuffer s = new StringBuffer();
         s.append("ID: " + id + "\nProduto: " + produto +
         "\nQuantidade: " + quantidade + "\n Do pedido: " + pedido + 
-        "\nPreço unitário: " + preco_unitario + "\nObservações: " + observacao);
+        "\nPreço unitário: " + preco_unitario);
         
         return s.toString();
     }

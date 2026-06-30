@@ -6,27 +6,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 
+import com.cafeteria.dados.Ingrediente;
 import com.cafeteria.dados.ItemPedido;
+import com.cafeteria.dados.Produto;
 
 public class ItemPedidoDAO {
 
-    public static int criaItemPedido(int quantidade, float preco_unitario, String obs, int fkPedido, int fkProduto){
-        String sql = "INSERT INTO Item_pedido (quantidade, preco_unitario, observacao, FK_pedido, FK_produto) VALUES (?, ?, ?, ?, ?)";
+    public static int criaItemPedido(int quantidade, float preco_unitario, int fkPedido, int fkProduto){
+        String sql = "INSERT INTO Item_pedido (quantidade, preco_unitario, FK_pedido, FK_produto) VALUES (?, ?, ?, ?)";
         try{
             Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             st.setInt(1, quantidade);
             st.setFloat(2, preco_unitario);
-            if(obs.length() == 0){
-                st.setNull(3, Types.VARCHAR);
-            }else{
-                st.setString(3, obs);
-            }
-            st.setInt(4, fkPedido);
-            st.setInt(5, fkPedido);
+            st.setInt(3, fkPedido);
+            st.setInt(4, fkProduto);
             st.executeUpdate();
 
             try (ResultSet rs = st.getGeneratedKeys()) {
@@ -59,7 +55,6 @@ public class ItemPedidoDAO {
                     res.getInt("ID_item_pedido"),
                     res.getInt("quantidade"),
                     res.getFloat("preco_unitario"),
-                    res.getString("observacao"),    
                     res.getInt("fk_pedido"),
                     res.getInt("fk_produto"));
             }else{
@@ -85,7 +80,6 @@ public class ItemPedidoDAO {
                     res.getInt("ID_item_pedido"),
                     res.getInt("quantidade"),
                     res.getFloat("preco_unitario"),
-                    res.getString("observacao"),    
                     res.getInt("fk_pedido"),
                     res.getInt("fk_produto"));
                 itensDoPedido.add(p);
@@ -148,5 +142,36 @@ public class ItemPedidoDAO {
 
             return false;
         }
+    }
+
+    public static List<Produto> mostraItensDeUmPedido(int idPedido){
+        List<Produto> lista = new ArrayList<>();
+        
+        String sql = "SELECT p.nome, p.categoria, ip.ID_item_pedido, " +
+        "ip.quantidade, ip.preco_unitario FROM Item_pedido ip " +
+        "JOIN Produto p ON ip.FK_produto = p.ID_produto WHERE ip.FK_pedido = ?";
+
+        try (Connection con = ConexaoDB.getInstancia();
+            PreparedStatement st = con.prepareStatement(sql)) {
+            
+            st.setInt(1, idPedido);
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Produto prod = new Produto(
+                        rs.getInt("ID_item_pedido"),
+                        rs.getString("nome"),
+                        rs.getInt("quantidade"),
+                        rs.getString("categoria")
+                    );
+
+                    lista.add(prod);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar itens do pedido: " + e.getMessage());
+        }
+        
+        return lista;
     }
 }

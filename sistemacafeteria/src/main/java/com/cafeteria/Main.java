@@ -322,7 +322,6 @@ public class Main {
         return 1;
     }
     public static Funcionario escolheFuncionario(Scanner s){
-        System.out.println("Escolha um Funcionário: ");
         if(mostraTodosFuncionarios() == 1){
             System.out.print("Sua escolha: ");
             return FuncionarioDAO.procuraFuncionarioPorID(leInt(s));
@@ -437,7 +436,6 @@ public class Main {
         }
     }
     public static Comanda escolheComandaAberta(Scanner s){
-        System.out.println("Escolha uma Comanda: ");
         if(mostraTodasComandasAbertas() == 1){
             System.out.print("Sua escolha: ");
             Comanda c = ComandaDAO.procuraComandaPorID(leInt(s));
@@ -515,8 +513,22 @@ public class Main {
     }
 
     /* AUXILIARES + FUNÇÕES SOBRE PEDIDOS */
+    public static int mostraItensDeUmPedido(int idPedido){
+        System.out.println("\tITENS DO PEDIDO:");
+        List<Produto> produtos = ItemPedidoDAO.mostraItensDeUmPedido(idPedido);
+        if(produtos.isEmpty()){
+            System.out.println("Não há itens no pedido");
+            return 0;
+        }else{
+            for(Produto prod : produtos){
+                System.out.println("\t\tID: " + prod.getId() + "; " + (int)prod.getPreco() + "x " + prod.getNome());
+            }
+            return 1;
+        }
+
+    }
     public static int mostraTodosPedidosPendentes(){
-        System.out.println("MOSTRANDO TODOS OS PEDIDOS PENTENDES");
+        System.out.println("MOSTRANDO TODOS OS PEDIDOS PENDENTES");
         List<Pedido> list = PedidoDAO.selectAll("pendente");
         if(list.isEmpty()){
             System.out.println("Não há registros para mostrar.");
@@ -524,6 +536,7 @@ public class Main {
         }
         for(Pedido p : list){
             System.out.println(p);
+            mostraItensDeUmPedido(p.getId());
         }
         System.out.println();
         return 1;
@@ -537,6 +550,7 @@ public class Main {
         }
         for(Pedido p : list){
             System.out.println(p);
+            mostraItensDeUmPedido(p.getId());
         }
         System.out.println();
         return 1;
@@ -550,6 +564,8 @@ public class Main {
         }
         for(Pedido p : list){
             System.out.println(p);
+            mostraItensDeUmPedido(p.getId());
+
         }
         System.out.println();
         return 1;
@@ -602,7 +618,7 @@ public class Main {
         System.out.println("4. Deletar um pedido");
         System.out.println("5. Mostrar todos os pedidos pendentes");
         System.out.println("6. Mostrar todos os pedidos concluídos");
-        System.out.println("7. Alterar itens de um pedido");
+        System.out.println("7. Alterar observação de um pedido");
         System.out.println("8. Voltar");
 
         int escolha = leInt(s);
@@ -612,10 +628,10 @@ public class Main {
                 System.out.println("Qual comanda fez o pedido?");
                 Comanda c = escolheComandaAberta(s);
                 if(c == null){
-                    System.out.println("Comanda inválida");
                     return;
                 }
-                int novoPedidoID = PedidoDAO.criaPedido(c.getId());
+
+                int novoPedidoID = PedidoDAO.criaPedido(c.getId(), "");
                 int escolhaPedido = 1;
                 while(escolhaPedido == 1){
                     System.out.println("Insira o produto pedido: ");
@@ -626,14 +642,15 @@ public class Main {
                     }
                     System.out.println("Você quer quantos desse item?");
                     int qtd = leInt(s);
-                    System.out.println("Insira observações sobre o item (ou deixe vazio):");
-                    String obs = leString(s);
 
-                    ItemPedidoDAO.criaItemPedido(qtd, p.getPreco(), obs, novoPedidoID, p.getId());
+                    ItemPedidoDAO.criaItemPedido(qtd, p.getPreco(), novoPedidoID, p.getId());
 
                     System.out.println("Criado! Quer adicionar outro produto no pedido? (1: Sim, 2: Não)");
                     escolhaPedido = leInt(s);
                 }
+                System.out.println("Insira observações sobre o pedido (se aplicável, ou só deixe em branco): ");
+                String obs = leString(s);
+                PedidoDAO.alteraPedido("observacao", novoPedidoID, obs);
                 break;
             case 2:
                 System.out.println("Escolha o pedido à ser concluído: ");
@@ -648,18 +665,19 @@ public class Main {
                     System.out.println("Funcionário inválido");
                     return;
                 }
-                    PedidoDAO.alteraPedido("FK_funcionario", p.getId(), String.valueOf(f.getId()));
-                    PedidoDAO.alteraPedido("status_pedido", p.getId(), "atendido");
-                
+                    if(PedidoDAO.alteraPedido("FK_funcionario", p.getId(), String.valueOf(f.getId())) && 
+                    PedidoDAO.alteraPedido("status_pedido", p.getId(), "atendido"))
+                    System.out.println("Pedido atendido com sucesso!");
                     break;
                 case 3:
-                System.out.println("Escolha o pedido à ser cancelado: ");
-                Pedido p1 = escolhePedidoPendente(s);
-                if(p1 == null || p1.getStatus_pedido() == "atendido"){
-                    System.out.println("Pedido inválido");
-                }else{
-                    PedidoDAO.alteraPedido("status_pedido", p1.getId(), "cancelado");
-                }
+                    System.out.println("Escolha o pedido à ser cancelado: ");
+                    Pedido p1 = escolhePedidoPendente(s);
+                    if(p1 == null || p1.getStatus_pedido() == "atendido"){
+                        System.out.println("Pedido inválido");
+                    }else{
+                        if(PedidoDAO.alteraPedido("status_pedido", p1.getId(), "cancelado"))
+                            System.out.println("Pedido cancelado!");
+                    }
                 break;
             case 4:
                 System.out.println("Escolha o pedido à ser deletado: ");
@@ -676,35 +694,15 @@ public class Main {
                 case 6:
                 mostraTodosPedidosConcluidos();
                 break;
+                
             case 7:
-                System.out.println("Escolha um pedido para alterar a lista: ");
+                System.out.println("Escolha um pedido para alterar a observação: ");
                 Pedido p3 = escolhePedidoPendente(s);
-                if(p3 == null || p3.getStatus_pedido() == "atendido"){
-                    System.out.println("Pedido inválido");
-                }else{
-                    System.out.println("O que você quer alterar do pedido? ");
-                    System.out.println("1. Quantidade");
-                    System.out.println("2. Observação");
-                    System.out.println("3. Produto");
-                    System.out.print("Sua escolha: ");
-                    int escolhaAlteracao = leInt(s);
-                    if(escolhaAlteracao == 1) {
-                        System.out.println("Insira a nova quantidade: ");
-                        String novaQtd = leString(s);
-                        ItemPedidoDAO.alteraItemPedido("quantidade", p3.getId(), novaQtd);
-                    }else if(escolhaAlteracao == 2){
-                        System.out.println("Insira a nova observação (ou deixe em branco):");
-                        String novaObs = leString(s);
-                        ItemPedidoDAO.alteraItemPedido("observacao", p3.getId(), novaObs);
-                    }else{
-                        System.out.println("Escolha o novo item: ");
-                        Produto prod = escolheProduto(s);
-                        if(prod == null){
-                            System.out.println("Item novo inválido.");
-                        }else{
-                            ItemPedidoDAO.alteraItemPedido("FK_produto", p3.getId(), String.valueOf(prod.getId()));                        }
+                if(p3 != null && p3.getStatus_pedido() != "atendido"){
+                    System.out.println("Insira a nova observação (ou deixe em branco): ");
+                    String novaObs = leString(s);
+                    PedidoDAO.alteraPedido("observacao", p3.getId(), novaObs);
                     }
-                }
                 break;
         
             default:

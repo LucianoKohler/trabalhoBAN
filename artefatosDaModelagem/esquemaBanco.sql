@@ -56,6 +56,7 @@ CREATE TABLE Pedido(
 	ID_pedido SERIAL PRIMARY KEY,
     data_hora_abertura timestamp DEFAULT CURRENT_TIMESTAMP,
     status_pedido varchar(20) DEFAULT 'pendente',
+    observacao varchar(255),
 	FK_comanda int,
 	FK_funcionario int,
 
@@ -79,7 +80,6 @@ CREATE TABLE Item_pedido(
 	ID_item_pedido SERIAL PRIMARY KEY,
 	quantidade int,
 	preco_unitario float,
-	observacao varchar(255),
 	FK_pedido int,
 	FK_produto int,
 
