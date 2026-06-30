@@ -57,7 +57,7 @@ public class Ingrediente {
 
     public String toString(){
         StringBuffer s = new StringBuffer();
-        s.append("ID: " + id + " Nome: " + nome + " Descricao: " + descricao + " Quantidade em estoque " + quantidade + " " + unidade_medida);
+        s.append("ID: " + id + " Nome: " + nome + " Descricao: " + descricao + " Quantidade em estoque: " + quantidade + " " + unidade_medida);
         return s.toString();
     }
 
