@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,10 +34,10 @@ public class InfoProdutoDAO {
     public static List<Ingrediente> buscaIngredientesDeUmProduto(int idProduto) {
         List<Ingrediente> lista = new ArrayList<>();
         
-        String sql = "SELECT r.ID_info_produto, i.nome, r.observacao " +
-                    "FROM Info_produto r " +
-                    "JOIN Ingrediente i ON r.FK_ingrediente = i.ID_ingrediente " +
-                    "WHERE r.FK_produto = ?";
+        String sql = "SELECT r.ID_info_produto, i.nome, r.observacao, r.quantidade, i.unidade_medida " +
+                 "FROM Info_produto r " +
+                 "JOIN Ingrediente i ON r.FK_ingrediente = i.ID_ingrediente " +
+                 "WHERE r.FK_produto = ?";
 
         try (Connection con = ConexaoDB.getInstancia();
             PreparedStatement st = con.prepareStatement(sql)) {
@@ -47,10 +46,13 @@ public class InfoProdutoDAO {
             
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    Ingrediente ing = new Ingrediente();
-                    ing.setId(rs.getInt("ID_info_produto"));
-                    ing.setNome(rs.getString("nome"));
-                    ing.setDescricao(rs.getString("observacao")); 
+                    Ingrediente ing = new Ingrediente(
+                        rs.getInt("ID_info_produto"),
+                        rs.getString("nome"),
+                        rs.getString("observacao"), 
+                        rs.getFloat("quantidade"), 
+                        rs.getString("unidade_medida")
+                    );
                     
                     lista.add(ing);
                 }

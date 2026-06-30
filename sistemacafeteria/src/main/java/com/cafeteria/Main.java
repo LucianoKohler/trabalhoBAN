@@ -1,5 +1,6 @@
 package com.cafeteria;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -141,9 +142,11 @@ public class Main {
                 return 0;
             }
             for(Ingrediente i : ings){
-                System.out.println("\t- ID: " + i.getId() + "; " + i.getNome());
+                DecimalFormat df = new DecimalFormat("#,##");
+                System.out.println("\t- ID: " + i.getId() + "; " + df.format(i.getQuantidade()) + i.getUnidade_medida() + " de " + i.getNome());
+
                 if(i.getDescricao() != null && !i.getDescricao().trim().isEmpty()){
-                    System.out.println("\tObs:" + i.getDescricao());
+                    System.out.println("\t\tObs:" + i.getDescricao());
             }
         }
         return 1;
@@ -711,6 +714,37 @@ public class Main {
 
     }
 
+    /* AUXILIARES + FUNÇÕES ADMINISTRATIVAS */
+    public static void menuEscolhaAdministrativa(Scanner s){
+        System.out.println("1. Mostrar os produtos mais vendidos");
+        System.out.println("2. Mostrar a média de preço dos produtos");
+        System.out.println("3. Mostrar o barista do mês");
+        System.out.println("4. Mostrar o gasto médio de uma mesa");
+        System.out.println("5. Voltar ");
+
+        int escolha = leInt(s);
+        switch (escolha) {
+            case 1:
+                System.out.println("Não tem nada aqui ainda ;)");
+                break;
+            case 2:
+                System.out.println("Não tem nada aqui ainda ;)");
+                break;
+            case 3:
+                System.out.println("Não tem nada aqui ainda ;)");
+                break;
+            case 4:
+                System.out.println("Não tem nada aqui ainda ;)");
+                break;
+            case 5:
+                break;
+        
+            default:
+                System.out.println("Escolha inválida!");
+                break;
+        }
+    }
+
     public static int menu(Scanner s){
         System.out.println("---------------------------------");
         System.out.println(".o°o.o°o.o° CAFETERIA °o.o°o.o°o.");
@@ -719,7 +753,8 @@ public class Main {
         System.out.println("3. Opções com Funcionários");
         System.out.println("4. Opções com Comanda");
         System.out.println("5. Opções com Pedido");
-        System.out.println("6. Sair do Programa");
+        System.out.println("6. Opções administrativas");
+        System.out.println("7. Sair do Programa");
         
         int escolha = Integer.parseInt(leString(s));
 
@@ -740,6 +775,9 @@ public class Main {
                 menuEscolhaPedido(s);
                 break;
             case 6:
+                menuEscolhaAdministrativa(s);
+                return 0;
+            case 7:
                 System.out.println("Até mais!");
                 return 0;
             default:
