@@ -59,7 +59,7 @@ public class AdministrativoDAO {
         " AS total_pedidos_atendidos, ROUND(SUM(ip.quantidade * ip.preco_unitario)::numeric, 2) " + 
         " AS faturamento_gerado FROM Pedido p JOIN Funcionario f ON p.FK_funcionario = " + 
         "f.ID_funcionario JOIN Item_pedido ip ON ip.FK_pedido = p.ID_pedido WHERE p.status_pedido " + 
-        "= 'atendido' AND p.data_hora_abertura >= DATE_TRUNC('month', CURRENT_DATE) " + 
+        "= 'atendido' AND p.data_hora_abertura >= '2026-06-01' AND p.data_hora_abertura < '2026-07-01' " + 
         " GROUP BY f.ID_funcionario, f.nome ORDER BY faturamento_gerado DESC LIMIT 1;";
 
         try{
@@ -79,5 +79,19 @@ public class AdministrativoDAO {
 }
 
 /*
+        -- PARA O MÊS
+        String sql = "SELECT f.nome AS barista_do_mes, COUNT(DISTINCT p.ID_pedido)" + 
+        " AS total_pedidos_atendidos, ROUND(SUM(ip.quantidade * ip.preco_unitario)::numeric, 2) " + 
+        " AS faturamento_gerado FROM Pedido p JOIN Funcionario f ON p.FK_funcionario = " + 
+        "f.ID_funcionario JOIN Item_pedido ip ON ip.FK_pedido = p.ID_pedido WHERE p.status_pedido " + 
+        "= 'atendido' AND p.data_hora_abertura >= DATE_TRUNC('month', CURRENT_DATE) " + 
+        " GROUP BY f.ID_funcionario, f.nome ORDER BY faturamento_gerado DESC LIMIT 1;";
 
+        -- PARA JUNHO
+        String sql = "SELECT f.nome AS barista_do_mes, COUNT(DISTINCT p.ID_pedido)" + 
+        " AS total_pedidos_atendidos, ROUND(SUM(ip.quantidade * ip.preco_unitario)::numeric, 2) " + 
+        " AS faturamento_gerado FROM Pedido p JOIN Funcionario f ON p.FK_funcionario = " + 
+        "f.ID_funcionario JOIN Item_pedido ip ON ip.FK_pedido = p.ID_pedido WHERE p.status_pedido " + 
+        "= 'atendido' AND p.data_hora_abertura >= '2026-06-01' AND p.data_hora_abertura < '2026-07-01' " + 
+        " GROUP BY f.ID_funcionario, f.nome ORDER BY faturamento_gerado DESC LIMIT 1;";
 */
