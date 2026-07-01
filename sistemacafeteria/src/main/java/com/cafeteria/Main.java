@@ -440,10 +440,11 @@ public class Main {
         if(mostraTodasComandasAbertas() == 1){
             System.out.print("Sua escolha: ");
             Comanda c = ComandaDAO.procuraComandaPorID(leInt(s));
-            if(c.getStatus_pgto().equals("aberta")){
+            if(c != null && c.getStatus_pgto().equals("aberta")){
                 return c;
             }else{
                 System.out.println("Comanda inválida.");
+                return null;
             }
         }
         System.out.println("Não há registros para mostrar.");
@@ -460,7 +461,7 @@ public class Main {
            
         int escolha = leInt(s);
 
-        switch (escolha) {
+        switch (escolha) { 
             case 1:
                 System.out.println("Digite o número da mesa da comanda:");
                 int numero = leInt(s);
@@ -577,7 +578,8 @@ public class Main {
         if(mostraTodosPedidosConcluidos() == 1){
             System.out.print("Sua escolha: ");
             Pedido p =  PedidoDAO.procuraPedidoPorID(leInt(s));
-            if(p.getStatus_pedido().equals("atendido")){
+            
+            if(p != null && p.getStatus_pedido().equals("atendido")){
                 return p;
             }else{
                 System.out.println("Pedido inválido.");
@@ -733,8 +735,12 @@ public class Main {
     }
     public static void mostraBaristaDoMes(){
         ItemRelatorio barista = AdministrativoDAO.mostraBaristaDoMes();
-        System.out.println("Parabéns ao " + barista.getNome() + " por atender um total de " +
-        barista.getQuantidade() + " pedidos e gerar incríveis R$" + barista.getValor() + " de faturamento nesse mês!!!");
+        if(barista == null){
+            System.out.println("Não há dados suficientes para retornar o barista do mês.");
+        }else{
+            System.out.println("Parabéns a " + barista.getNome() + " por atender um total de " +
+            barista.getQuantidade() + " pedidos e gerar incríveis R$" + barista.getValor() + " de faturamento nesse mês!!!");
+        }
     }
     public static void menuEscolhaAdministrativa(Scanner s){
         System.out.println("1. Mostrar os produtos mais vendidos");
